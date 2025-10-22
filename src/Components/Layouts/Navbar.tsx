@@ -12,7 +12,7 @@ const navigation = {
     { name: 'River Rewards', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
   ],
   learn: [
-    { name: 'Learn', href: '#' },
+    { name: 'Learn', href: '/privateriver' },
     { name: 'Research', href: '#' },
     { name: 'Support', href: '#' },
     { name: 'Announcement', href: '#' },
@@ -30,7 +30,7 @@ const navigation = {
 
 const navItems = [
   { label: 'Individuals', key: 'individuals', hasDropdown: true },
-  { label: 'Private Clients', key: 'private' },
+  { label: 'Private Clients', key: 'private', href:'/privateriver' },
   { label: 'Business', key: 'business' },
   { label: 'Learn', key: 'learn', hasDropdown: true },
   { label: 'About', key: 'about', hasDropdown: true },

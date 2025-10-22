@@ -7,7 +7,7 @@ import img5 from '../../../public/assets/private-client-man.webp';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 export default function AssetDisplay() {
-    const cards = [
+    const card = [
         {
             img: img1,
             title: (
@@ -50,7 +50,7 @@ export default function AssetDisplay() {
 
 
             <div className="grid md:grid-cols-2 gap-10">
-                {cards.map(({ img, title, desc, btn }, i) => (
+                {card.map(({ img, title, desc, btn }, i) => (
                     <div
                         key={i}
                         className="relative group bg-[#1D1D1D] p-12 rounded-2xl overflow-hidden h-[580px] flex justify-center"

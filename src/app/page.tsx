@@ -15,7 +15,7 @@ export default function Home() {
     <Whyinvest />
     <HereForYou />
     <JoinUs />
-
+    
    </div>
   );
 }
