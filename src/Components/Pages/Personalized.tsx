@@ -1,5 +1,10 @@
 import Image from 'next/image';
-import service from '@/../public/assets/Rivercall.webp';
+
+// Import images for each service
+import service1 from '@/../public/assets/Rivercall.webp';
+import service2 from '@/../public/assets/interest.webp';
+import service3 from '@/../public/assets/beneficiaries.webp';
+import { Button } from '@headlessui/react';
 
 export default function Personalized() {
     const services = [
@@ -7,29 +12,33 @@ export default function Personalized() {
             id: 1,
             title: 'Priority Service',
             description: "Experience personalized support from our team of Bitcoin experts.",
+            image: service1,
             items: [
                 "Dedicated Relationship Manager",
                 "Exclusive events",
                 "U.S. based phone support"
-            ],
-            Image: service
+            ]
         },
         {
             id: 2,
-            title: 'Sophisticated investing',
-            description: "Strengthen your portfolio. Outperform the rest.",
+            title: 'Premium Access',
+            description: "Enjoy exclusive insights and tailored Bitcoin investment opportunities.",
+            image: service2,
             items: [
-                "High transaction limits",
-                "Tax optimization",
-                "Performance tracking"
+                "Early access to updates",
+                "1-on-1 strategy sessions",
+                "Custom portfolio reviews"
             ]
         },
         {
             id: 3,
-            title: 'Earn 3.75% interest on cash. Paid in Bitcoin.',
-            description: "Put your cash to work and earn Bitcoin. Cash is FDIC insured, no hidden fees or minimums and withdraw your cash at any time.",
+            title: 'Elite Membership',
+            description: "Gain unparalleled access to Bitcoin industry leaders and private events.",
+            image: service3,
             items: [
-               
+                "Private community access",
+                "Global Bitcoin events",
+                "Priority transaction support"
             ]
         }
     ];
@@ -46,15 +55,16 @@ export default function Personalized() {
                     className="w-8xl mx-auto bg-[#131313] rounded-3xl mt-16 p-10 lg:p-20"
                 >
                     <div className="flex flex-col lg:flex-row-reverse items-center gap-9 lg:gap-16">
-                        {/* Right Side - Image */}
+                        
+                        {/* Right Side - Dynamic Image */}
                         <div className="lg:w-1/2 w-full">
-                            <div className="relative m-5 rounded-2xl overflow-hidden shadow-xl">
+                            <div className="relative m-5 rounded-2xl overflow-hidden ">
                                 <Image
-                                    src={service}
+                                    src={serviceItem.image}
                                     alt={serviceItem.title}
                                     width={600}
                                     height={500}
-                                    className="h-auto object-cover"
+                                    className="h-auto "
                                     priority
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] from-10% via-transparent to-transparent" />
@@ -75,7 +85,7 @@ export default function Personalized() {
                             <div className="space-y-4">
                                 {serviceItem.items.map((text, idx) => (
                                     <div key={idx} className="flex items-center gap-4">
-                                        <div className="flex-shrink-0 w-6 h-6 rounded-full border-[#C5A063] bg-[#131313] flex items-center justify-center">
+                                        <div className="flex-shrink-0 w-6 h-6 rounded-full  border border-[#C5A063] bg-[#131313] flex items-center justify-center">
                                             <svg
                                                 className="w-3 h-3 text-white"
                                                 fill="none"
@@ -97,11 +107,11 @@ export default function Personalized() {
                                 ))}
                             </div>
 
-                            {/* Button */}
+                            {/* CTA Button */}
                             <div className="pt-4">
-                                <button className="bg-[#C5A063] hover:bg-gray-800 text-black font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform">
+                                <Button className="bg-[#C5A063] hover:bg-gray-800 text-black font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform">
                                     Talk to our team
-                                </button>
+                                </Button>
                             </div>
                         </div>
                     </div>

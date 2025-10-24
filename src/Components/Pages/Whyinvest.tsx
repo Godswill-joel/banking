@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import img1 from '../../../public/assets/investment-returns.webp';
 import img2 from '../../../public/assets/protect-wealth.webp';
-import { title } from 'process';
 
 export default function Whyinvest() {
     const images = [

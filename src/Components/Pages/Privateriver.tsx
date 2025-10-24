@@ -3,6 +3,7 @@
 import Image from "next/image";
 import privateclienthero from "@/../public/assets/privateclienthero.webp";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
+import { Button } from "@headlessui/react";
 
 export default function PrivateClientHero() {
     return (
@@ -24,9 +25,9 @@ export default function PrivateClientHero() {
                         entity and start investing in Bitcoin today.
                     </p>
 
-                    <button className="bg-[#C5A063] hover:bg-[#b08a53] text-black font-medium py-3 px-6 rounded-lg transition">
+                    <Button className="bg-[#C5A063] hover:bg-[#b08a53] text-black font-medium py-3 px-6 rounded-lg transition">
                         Talk to the team
-                    </button>
+                    </Button>
 
                     <div className="grid grid-cols-2 gap-4 pt-6 text-gray-300 text-2xl">
                         <div className="flex items-center gap-2">
