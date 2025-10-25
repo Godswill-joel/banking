@@ -15,7 +15,7 @@ export default function ContactTrustPage() {
   ];
 
   return (
-    <section className="bg-[#131313] text-white  w-full overflow-hidden">  
+    <section className="bg-[#1D1D1D] text-white  w-full overflow-hidden">  
       <div className="flex flex-col items-center justify-center py-24 px-6 text-center bg-[#0D0D0D]">
         <h2 className="text-3xl md:text-5xl font-semibold mb-10">
           Trusted by over 3,000 visionary <br className="hidden md:block" />
