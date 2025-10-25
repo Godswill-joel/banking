@@ -4,12 +4,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { footer } from "@/data/data";
-import { Icon } from "@/Components/Pages/Icon";
+import   Icon   from "@/Components/Pages/Icon";
 
 export default function Footer() {
   return (
     <footer role="contentinfo" className="bg-[#0b0b0b] text-gray-300">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 py-12 lg:py-16">
+      <div className="max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 py-12 lg:py-18">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand column */}
           <div className="space-y-6">
@@ -24,17 +24,17 @@ export default function Footer() {
                   className="object-contain"
                 />
               ) : (
-                <span className="text-xl font-bold">{footer.brand.name}</span>
+                <span className="text-lg font-bold">{footer.brand.name}</span>
               )}
             </div>
 
-            <div className="text-sm text-gray-400 space-y-1">
+            <div className="text-2xl text-gray-400 space-y-1">
               {footer.brand.legalLines.map((line, idx) => (
                 <p key={idx}>{line}</p>
               ))}
             </div>
 
-            <div className="flex flex-col gap-3 mt-2">
+            {/* <div className="flex flex-col gap-3 mt-2">
               {footer.brand.appButtons.map((b) => (
                 <a
                   key={b.id}
@@ -44,7 +44,6 @@ export default function Footer() {
                   aria-label={b.alt}
                   className="inline-flex items-center gap-3 w-max rounded-lg border border-gray-700 px-3 py-2 bg-transparent hover:bg-white/5 transition focus:outline-none focus:ring-2 focus:ring-yellow-500/30"
                 >
-                  {/* Badge image (recommended), fall back to text if missing */}
                   {b.img ? (
                     <Image
                       src={b.img}
@@ -54,16 +53,16 @@ export default function Footer() {
                       className="object-contain"
                     />
                   ) : (
-                    <span className="text-sm font-medium text-gray-200">{b.label}</span>
+                    <span className="text-2xl font-medium text-gray-200">{b.label}</span>
                   )}
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
 
           {footer.columns.map((col) => (
             <nav key={col.title} aria-label={col.title} className="space-y-3">
-              <h3 className="text-sm font-semibold text-gray-200">{col.title}</h3>
+              <h3 className="text-2xl font-semibold text-gray-200">{col.title}</h3>
 
               <ul className="space-y-2">
                 {col.links.map((link) => {
@@ -79,12 +78,12 @@ export default function Footer() {
                           aria-label={link.label}
                         >
                           <Icon name={link.icon} className="w-4 h-4" aria-hidden="true" />
-                          <span className="text-sm">{link.label}</span>
+                          <span className="text-2xl">{link.label}</span>
                         </a>
                       ) : (
                         <Link
                           href={link.href}
-                          className="text-sm text-gray-400 hover:text-gray-200 transition focus:outline-none focus:ring-2 focus:ring-yellow-500/30 rounded-sm px-1 py-0.5 inline-block"
+                          className="text-2xl text-gray-400 hover:text-gray-200 transition focus:outline-none focus:ring-2 focus:ring-yellow-500/30 rounded-sm px-1 py-0.5 inline-block"
                           {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                         >
                           {link.label}

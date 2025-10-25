@@ -72,24 +72,24 @@ export const footer = {
       "NMLS ID#1906809",
       "© 2025 River Financial Inc. All rights reserved.",
     ],
-    appButtons: [
-      {
-        id: "ios",
-        label: "Download on the App Store",
-        href: "https://www.apple.com/app-store/",
-        img: "/images/appstore-badge.png",
-        alt: "Download on the App Store",
-        external: true,
-      },
-      {
-        id: "android",
-        label: "Get it on Google Play",
-        href: "https://play.google.com/store",
-        img: "/images/googleplay-badge.png",
-        alt: "Get it on Google Play",
-        external: true,
-      },
-    ],
+    // appButtons: [
+    //   {
+    //     id: "ios",
+    //     label: "Download on the App Store",
+    //     href: "https://www.apple.com/app-store/",
+    //     img: "/images/appstore-badge.png",
+    //     alt: "Download on the App Store",
+    //     external: true,
+    //   },
+    //   {
+    //     id: "android",
+    //     label: "Get it on Google Play",
+    //     href: "https://play.google.com/store",
+    //     img: "/images/googleplay-badge.png",
+    //     alt: "Get it on Google Play",
+    //     external: true,
+    //   },
+    // ],
   },
 
   columns: [
@@ -157,3 +157,45 @@ export const footer = {
     },
   ],
 };
+
+
+
+export const executiveTeam = [
+  {
+    id: "alex-leishman",
+    name: "Alex Leishman",
+    role: "Founder, CEO & CTO",
+    image: "/assets/alex-leishman.webp", 
+    linkedin: "https://linkedin.com/in/alexleishman",
+    about:
+      "Alex founded River to make Bitcoin accessible with top-tier security and transparency. His background in aerospace engineering and software has shaped River’s focus on precision and innovation.",
+  },
+  {
+    id: "julia-duzon",
+    name: "Julia Duzon",
+    role: "Chief Operating Officer",
+    image: "/assets/julia-duzon.webp",
+    linkedin: "https://linkedin.com/in/juliaduzon",
+    about:
+      "Julia drives River’s operational strategy and ensures that client success remains at the core of every product and service decision.",
+  },
+  {
+    id: "bill-mongan",
+    name: "Bill mongan",
+    role: "Chief Financial Officer",
+    image: "/assets/bill-mongan.webp",
+    linkedin: "https://linkedin.com/in/davidmiller",
+    about:
+      "Bill leads River’s finance and risk management efforts, bringing over 15 years of experience in digital asset investment and financial strategy.",
+  },
+  {
+    id: "james-page",
+    name: "James Page",
+    role: "Chief Product Officer",
+    image: "/assets/bill-mongan.webp",
+    linkedin: "https://linkedin.com/in/davidmiller",
+    about:
+      "James Page is the Chief Product Officer at River. In this role, James is responsible for driving product strategy and managing River's product management and design teams. Prior to joining River, James was a product manager at Pinterest and Meta where he worked on AdTech products to empower advertisers to create and manage their ads on the respective social media platforms. James holds a B.A. from American University in Washington DC.",
+  },
+];
+
