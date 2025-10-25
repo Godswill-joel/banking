@@ -1,12 +1,12 @@
-import ContactTrustPage from "../../Components/Pages/TrustPage";
-import BusinessFuturePage from "../../Components/Pages/Securebitcoin";
-import PerformanceSection from "../../Components/Pages/Perfomance";
-import BusinessHero from "@/Components/Pages/BusinessHero";
-import BusinessSteps from "@/Components/Pages/BusinessSteps";
-import SecurityFeature from "@/Components/Pages/SecurityFeature";
-import BusinessInsights from "@/Components/Pages/BusinessInsight";
-import CustomerStories from "@/Components/Pages/CustomerNeed";
-import Hero from "@/Components/Pages/Bitcoin";
+import ContactTrustPage from "../../Components/Pages/business/TrustPage";
+import BusinessFuturePage from "../../Components/Pages/business/Securebitcoin";
+import PerformanceSection from "../../Components/Pages/business/Perfomance";
+import BusinessHero from "@/Components/Pages/business/BusinessHero";
+import BusinessSteps from "@/Components/Pages/business/BusinessSteps";
+import SecurityFeature from "@/Components/Pages/business/SecurityFeature";
+import BusinessInsights from "@/Components/Pages/business/BusinessInsight";
+import CustomerStories from "@/Components/Pages/business/CustomerNeed";
+import Hero from "@/Components/Pages/business/Bitcoin";
 
 export default function page(){
     return (
