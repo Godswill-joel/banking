@@ -37,7 +37,7 @@ export default function BusinessFuturePage() {
     <main className="min-h-screen bg-[#0e0e0e] text-white py-26 px-16 md:px-15 lg:px-29">
       <section className="max-w-7xl mx-auto">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-center mb-10">
-          Secure your business's future today
+          Secure your business&apos;s future today
         </h1>
 
         {/* Cards grid */}
