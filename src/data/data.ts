@@ -165,7 +165,7 @@ export const executiveTeam = [
     id: "alex-leishman",
     name: "Alex Leishman",
     role: "Founder, CEO & CTO",
-    image: "/assets/alex-leishman.webp", 
+    image: "/assets/alex-leishman.webp",
     linkedin: "https://linkedin.com/in/alexleishman",
     about:
       "Alex founded River to make Bitcoin accessible with top-tier security and transparency. His background in aerospace engineering and software has shaped River’s focus on precision and innovation.",
@@ -195,7 +195,43 @@ export const executiveTeam = [
     image: "/assets/bill-mongan.webp",
     linkedin: "https://linkedin.com/in/davidmiller",
     about:
-      "James Page is the Chief Product Officer at River. In this role, James is responsible for driving product strategy and managing River's product management and design teams. Prior to joining River, James was a product manager at Pinterest and Meta where he worked on AdTech products to empower advertisers to create and manage their ads on the respective social media platforms. James holds a B.A. from American University in Washington DC.",
+      "James Page is the Chief Product Officer at River. In this role, James is responsible for driving product strategy and managing River's product management and design teams.",
+  },
+  {
+    id: "cem-paya",
+    name: "Cem Paya",
+    role: "Chief Security Officer",
+    image: "/assets/cem-paya-.webp",
+    linkedin: "https://linkedin.com/in/davidmiller",
+    about:
+      "Cem is the Chief Security Officer at River, where he oversees the security of all systems. He is an information security & cryptography professional with 25 years of experience in risk management for online services and fintech.",
+  },
+  {
+    id: "ellen-weaver",
+    name: "Ellen Weaver",
+    role: "Director of People",
+    image: "/assets/ellen-weaver.webp",
+    linkedin: "https://linkedin.com/in/ellenaweaver/",
+    about:
+      "Ellen Weaver is the Director of People at River, where she oversees people operations, hospitality, and IT functions. Ms. Weaver earned her degree in Business and Hospitality from Glion Institute of Higher Education, in Montreux, Switzerland.",
+  },
+  {
+    id: "joe-bryan",
+    name: "Joe Bryan",
+    role: "Director of Finance",
+    image: "/assets/joe-bryan.webp",
+    linkedin: "https://linkedin.com/in/joerbryan/",
+    about:
+      "Joe Bryan is the Director of Finance at River, where he oversees the Accounting, FP&A, and Financial Operations teams. Joe joined River at a very early stage and has filled many roles in his time, including Chief of Staff, and Head of Financial Operations.",
+  },
+  {
+    id: "sam-wouters",
+    name: "Sam Wouters",
+    role: "Director of Marketing",
+    image: "/assets/sam-wouters.webp",
+    linkedin: "https://linkedin.com/in/samwouters/",
+    about:
+      "Sam Wouters is the Director of Marketing at River, where he oversees the brand, marketing strategy, and the marketing team. Before joining River, Sam held research and marketing roles at tech companies and was a prolific public speaker.",
   },
 ];
 
