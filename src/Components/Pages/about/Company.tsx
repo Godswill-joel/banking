@@ -85,11 +85,10 @@ export default function AboutHero() {
 
                   {/* ABOUT SECTION (Expands Under Card) */}
                   <div
-                    className={`w-full text-left bg-transparent border-t border-gray-700 pt-6 transition-all duration-500 ease-in-out overflow-hidden ${
-                      isOpen
+                    className={`w-full text-left bg-transparent border-t border-gray-700 pt-6 transition-all duration-500 ease-in-out overflow-hidden ${isOpen
                         ? "max-h-[500px] opacity-100 mt-4"
                         : "max-h-0 opacity-0 mt-0"
-                    }`}
+                      }`}
                   >
                     <p className="text-gray-300 text-lg leading-relaxed px-2 md:px-6">
                       {member.about}
@@ -99,6 +98,17 @@ export default function AboutHero() {
               );
             })}
           </div>
+        </div>
+        <div className="text-center mt-20">
+          <div >
+            <h2 className="font-bold text-7xl">Built to last</h2>
+          </div>
+            <div className="max-w-290 text-center px-6 h-[250px]">
+              <p className="text-gray-400 text-2xl py-10 leading-relaxed space-4">
+              The trust of our clients is our greatest asset. We recognize that consumers deserve industry-leading technology, client service, education, and security.
+              Every facet of our business is engineered to protect our clients' investments for the long-term and stand the test of time. As the economy is transformed by Bitcoin, River's products and services will be at the forefront of that evolution.
+              </p>
+            </div>
         </div>
       </div>
     </section>
