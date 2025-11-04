@@ -1,8 +1,8 @@
-import ContactForm from "../../Components/Pages/Contact";
-import Privateriver from "../../Components/Pages/Privateriver";
-import Personalized from "../../Components/Pages/Personalized";
+import ContactForm from "../../Components/Pages/privateriver/Contact";
+import Privateriver from "../../Components/Pages/privateriver/Privateriver";
+import Personalized from "../../Components/Pages/privateriver/Personalized";
 import FeaturedIn from "@/Components/Pages/FeaturedIn";
-import WorldClassSecurity from "../../Components/Pages/Worldclass";
+import WorldClassSecurity from "../../Components/Pages/privateriver/Worldclass";
 
 
 export default function page() {

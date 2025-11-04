@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { storiesData } from "../../data/data";
+import { storiesData } from "../../../data/data";
 
 export default function CustomerStories() {
   const [activeIndex, setActiveIndex] = useState(0);

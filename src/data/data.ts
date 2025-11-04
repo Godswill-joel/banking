@@ -28,7 +28,7 @@ export const storiesData = [
   {
     id: "bluecotton",
     label: "BlueCotton",
-    youtubeId: "uIHiwABLp84", 
+    youtubeId: "uIHiwABLp84",
     quote:
       "We chose River as our bitcoin platform because we get personal service. That's the bottom line.",
     author: "Mike Coffey",
@@ -38,7 +38,7 @@ export const storiesData = [
   {
     id: "intentional-living",
     label: "Intentional Living FP",
-    youtubeId: "_Nh4lJujceI", 
+    youtubeId: "_Nh4lJujceI",
     quote:
       "River helped us diversify our treasury with bitcoin while maintaining complete control and transparency.",
     author: "Sarah Nguyen",
@@ -48,12 +48,190 @@ export const storiesData = [
   {
     id: "keen-eyecare",
     label: "Keen Eyecare Consultants",
-    youtubeId: "1M728CWRyB8", 
+    youtubeId: "1M728CWRyB8",
     quote:
       "The onboarding process was fast and secure — River’s team really understands business needs.",
     author: "James Ortega",
     role: "Managing Partner, Keen Eyecare Consultants",
     cta: { text: "Get started", href: "/signup" },
+  },
+];
+
+export type FooterLink = {
+  label: string;
+  href: string;
+  external?: boolean;
+  icon?: string;
+};
+
+export const footer = {
+  brand: {
+    name: "RIVER",
+    logo: "/Logo/logo.svg",
+    legalLines: [
+      "NMLS ID#1906809",
+      "© 2025 River Financial Inc. All rights reserved.",
+    ],
+    // appButtons: [
+    //   {
+    //     id: "ios",
+    //     label: "Download on the App Store",
+    //     href: "https://www.apple.com/app-store/",
+    //     img: "/images/appstore-badge.png",
+    //     alt: "Download on the App Store",
+    //     external: true,
+    //   },
+    //   {
+    //     id: "android",
+    //     label: "Get it on Google Play",
+    //     href: "https://play.google.com/store",
+    //     img: "/images/googleplay-badge.png",
+    //     alt: "Get it on Google Play",
+    //     external: true,
+    //   },
+    // ],
+  },
+
+  columns: [
+    {
+      title: "Product",
+      links: [
+        { label: "Sign Up", href: "/signup" },
+        { label: "Buy Bitcoin", href: "/buy" },
+        { label: "Bitcoin Interest", href: "/interest" },
+        { label: "Zero Fee DCA", href: "/dca" },
+        { label: "River Link", href: "/link" },
+        { label: "Bitcoin Price", href: "/price" },
+        { label: "Private Clients", href: "/private" },
+        { label: "Businesses", href: "/businesses" },
+        { label: "Learn", href: "/learn" },
+      ] as FooterLink[],
+    },
+    {
+      title: "Company",
+      links: [
+        { label: "About", href: "/about" },
+        { label: "Careers", href: "/careers" },
+        { label: "Areas of Availability", href: "/availability" },
+        { label: "Announcements", href: "/announcements" },
+        { label: "Security", href: "/security" },
+        { label: "Proof of Reserves", href: "/proof-of-reserves" },
+        { label: "Partner", href: "/partner" },
+      ] as FooterLink[],
+    },
+    {
+      title: "Support",
+      links: [
+        { label: "Help Center", href: "/help" },
+        { label: "Contact Support", href: "/contact" },
+        { label: "Site Status", href: "/status" },
+      ] as FooterLink[],
+    },
+    {
+      title: "Social",
+      links: [
+        {
+          label: "Newsletter",
+          href: "/newsletter",
+          icon: "newsletter",
+        },
+        {
+          label: "Twitter",
+          href: "https://twitter.com/river",
+          external: true,
+          icon: "twitter",
+        },
+        {
+          label: "LinkedIn",
+          href: "https://www.linkedin.com",
+          external: true,
+          icon: "linkedin",
+        },
+        {
+          label: "GitHub",
+          href: "https://github.com/river",
+          external: true,
+          icon: "github",
+        },
+      ] as FooterLink[],
+    },
+  ],
+};
+
+
+
+export const executiveTeam = [
+  {
+    id: "alex-leishman",
+    name: "Alex Leishman",
+    role: "Founder, CEO & CTO",
+    image: "/assets/alex-leishman.webp",
+    linkedin: "https://linkedin.com/in/alexleishman",
+    about:
+      "Alex founded River to make Bitcoin accessible with top-tier security and transparency. His background in aerospace engineering and software has shaped River’s focus on precision and innovation.",
+  },
+  {
+    id: "julia-duzon",
+    name: "Julia Duzon",
+    role: "Chief Operating Officer",
+    image: "/assets/julia-duzon.webp",
+    linkedin: "https://linkedin.com/in/juliaduzon",
+    about:
+      "Julia drives River’s operational strategy and ensures that client success remains at the core of every product and service decision.",
+  },
+  {
+    id: "bill-mongan",
+    name: "Bill mongan",
+    role: "Chief Financial Officer",
+    image: "/assets/bill-mongan.webp",
+    linkedin: "https://linkedin.com/in/davidmiller",
+    about:
+      "Bill leads River’s finance and risk management efforts, bringing over 15 years of experience in digital asset investment and financial strategy.",
+  },
+  {
+    id: "james-page",
+    name: "James Page",
+    role: "Chief Product Officer",
+    image: "/assets/bill-mongan.webp",
+    linkedin: "https://linkedin.com/in/davidmiller",
+    about:
+      "James Page is the Chief Product Officer at River. In this role, James is responsible for driving product strategy and managing River's product management and design teams.",
+  },
+  {
+    id: "cem-paya",
+    name: "Cem Paya",
+    role: "Chief Security Officer",
+    image: "/assets/cem-paya-.webp",
+    linkedin: "https://linkedin.com/in/davidmiller",
+    about:
+      "Cem is the Chief Security Officer at River, where he oversees the security of all systems. He is an information security & cryptography professional with 25 years of experience in risk management for online services and fintech.",
+  },
+  {
+    id: "ellen-weaver",
+    name: "Ellen Weaver",
+    role: "Director of People",
+    image: "/assets/ellen-weaver.webp",
+    linkedin: "https://linkedin.com/in/ellenaweaver/",
+    about:
+      "Ellen Weaver is the Director of People at River, where she oversees people operations, hospitality, and IT functions. Ms. Weaver earned her degree in Business and Hospitality from Glion Institute of Higher Education, in Montreux, Switzerland.",
+  },
+  {
+    id: "joe-bryan",
+    name: "Joe Bryan",
+    role: "Director of Finance",
+    image: "/assets/joe-bryan.webp",
+    linkedin: "https://linkedin.com/in/joerbryan/",
+    about:
+      "Joe Bryan is the Director of Finance at River, where he oversees the Accounting, FP&A, and Financial Operations teams. Joe joined River at a very early stage and has filled many roles in his time, including Chief of Staff, and Head of Financial Operations.",
+  },
+  {
+    id: "sam-wouters",
+    name: "Sam Wouters",
+    role: "Director of Marketing",
+    image: "/assets/sam-wouters.webp",
+    linkedin: "https://linkedin.com/in/samwouters/",
+    about:
+      "Sam Wouters is the Director of Marketing at River, where he oversees the brand, marketing strategy, and the marketing team. Before joining River, Sam held research and marketing roles at tech companies and was a prolific public speaker.",
   },
 ];
 
