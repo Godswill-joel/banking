@@ -23,7 +23,7 @@ const securitySections = [
   
   export default function SecurityDetails() {
     return (
-      <section className="bg-[#0b0b0b] text-white py-20 px-6 md:px-12">
+      <section className="bg-[#0b0b0b] top-10 text-white py-20 px-6 md:px-12">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-12 text-left mt-16">
           {securitySections.map((section, index) => (
             <div key={index} className="w-full md:w-1/2">
