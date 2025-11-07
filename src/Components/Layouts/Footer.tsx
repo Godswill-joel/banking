@@ -77,7 +77,7 @@ export default function Footer() {
                           className="flex items-center gap-2 text-gray-400 hover:text-gray-200 transition focus:outline-none focus:ring-2 focus:ring-yellow-500/30 rounded-sm px-1 py-0.5"
                           aria-label={link.label}
                         >
-                          <Icon name={link.icon} className="w-4 h-4" aria-hidden="true" />
+                          <Icon name={link.icon} className="w-4 h-4" aria-hidden={true} />
                           <span className="text-2xl">{link.label}</span>
                         </a>
                       ) : (

@@ -106,7 +106,7 @@ export default function AboutHero() {
             <div className="max-w-290 text-center px-6 h-[250px]">
               <p className="text-gray-400 text-2xl py-10 leading-relaxed space-4">
               The trust of our clients is our greatest asset. We recognize that consumers deserve industry-leading technology, client service, education, and security.
-              Every facet of our business is engineered to protect our clients' investments for the long-term and stand the test of time. As the economy is transformed by Bitcoin, River's products and services will be at the forefront of that evolution.
+              Every facet of our business is engineered to protect our client&apos;s investments for the long-term and stand the test of time. As the economy is transformed by Bitcoin, River&apos;s products and services will be at the forefront of that evolution.
               </p>
             </div>
         </div>

@@ -1,10 +1,9 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import icon1 from '../../../public/icons/CurrencyBtc.svg'
-import icon2 from '../../../public/icons/WalletDuotone.svg'
-import icon3 from '../../../public/icons/gold-headset.svg'
-import icon4 from '../../../public/icons/key-gold.svg'
-import icon5 from '../../../public/icons/stamp-gold.svg'
+import Image from 'next/image';
+import icon1 from '../../../public/icons/CurrencyBtc.svg';
+import icon2 from '../../../public/icons/WalletDuotone.svg';
+import icon3 from '../../../public/icons/gold-headset.svg';
+import icon4 from '../../../public/icons/key-gold.svg';
+import icon5 from '../../../public/icons/stamp-gold.svg';
 
 export default function BuyBitcoinGrid() {
     const data = [
