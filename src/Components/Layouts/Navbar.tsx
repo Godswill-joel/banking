@@ -20,7 +20,7 @@ const navigation = {
   about: [
     { name: 'Company', href: '#' },
     { name: 'Careers', href: '#' },
-    { name: 'Security', href: '#' },
+    { name: 'Security', href: '/securityPage' },
     { name: 'Proof of reserves', href: '#' },
     { name: 'Company financials', href: '#' },
     { name: 'Partners', href: '#' },
@@ -30,7 +30,7 @@ const navigation = {
 
 const navItems = [
   { label: 'Individuals', key: 'individuals', hasDropdown: true },
-  { label: 'Private Clients', key: 'private', href:'/privateriver' },
+  { label: 'Private Clients', key: 'private', href: '/privateriver' },
   { label: 'Business', key: 'business' },
   { label: 'Learn', key: 'learn', hasDropdown: true },
   { label: 'About', key: 'about', hasDropdown: true },
@@ -61,12 +61,11 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? 'bg-[#131313] shadow-md' : 'bg-[#131313]/95 backdrop-blur-sm'
-      }`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#131313] shadow-md' : 'bg-[#131313]/95 backdrop-blur-sm'
+        }`}
     >
-      <div className="max-w-7xl mx-auto flex h-16 items-center justify-between px-4">
-        <Image src="/Logo/logo.svg" alt="Logo" width={100} height={40} priority />
+      <div className="max-w-8xl mx-auto flex h-26 items-center justify-between px-10">
+        <Image src="/Logo/logo.svg" alt="Logo" width={150} height={100} priority />
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-1">
@@ -78,28 +77,27 @@ export default function Navbar() {
               onMouseLeave={() => hasDropdown && setActive(null)}
             >
               <button
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-                  active === key ? 'bg-gray-700 text-white' : 'text-[#F9F9F9] hover:bg-gray-700/60'
-                }`}
+                className={`px-4 py-2 text-2xl font-medium text-gray-200 rounded-md transition-colors ${active === key ? 'bg-gray-700 text-white' : 'text-[#F9F9F9] hover:bg-gray-700/60'
+                  }`}
               >
                 {label}
               </button>
               {active === key && hasDropdown && <Dropdown items={navigation[key as keyof typeof navigation]} />}
             </div>
           ))}
+           <p className='px-5 text-2xl'> BTC Price:<span className='text-[#C5A063] text-2xl'>$103,408.78</span></p>
         </div>
-
+       
         {/* Auth Buttons */}
         <div className="hidden md:flex items-center space-x-3">
           {['Log in', 'Sign up'].map((txt, i) => (
             <a
               key={txt}
               href="#"
-              className={`px-5 py-2 text-sm font-medium rounded-lg transition-colors ${
-                i
-                  ? 'bg-blue-600 hover:bg-blue-700 text-white'
+              className={`px-5 py-2 text-2xl font-medium rounded-2xl transition-colors ${i
+                  ? 'bg-[#C5A063] hover:bg-[#b08a53]  text-black'
                   : 'text-[#F9F9F9] hover:bg-gray-700/60'
-              }`}
+                }`}
             >
               {txt}
             </a>
@@ -130,11 +128,10 @@ export default function Navbar() {
               <a
                 key={txt}
                 href="#"
-                className={`block w-full text-center px-4 py-2.5 text-sm font-medium rounded-lg ${
-                  i
+                className={`block w-full text-center px-4 py-2.5 text-sm font-medium rounded-lg ${i
                     ? 'bg-blue-600 text-white'
                     : 'border border-gray-600 text-[#F9F9F9]'
-                }`}
+                  }`}
               >
                 {txt}
               </a>

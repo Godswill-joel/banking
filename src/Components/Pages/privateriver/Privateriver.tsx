@@ -55,8 +55,6 @@ export default function PrivateClientHero() {
             ))}
           </div>
         </motion.div>
-
-        {/* RIGHT SIDE — Image */}
         <motion.div
           initial={{ opacity: 0, x: 60 }}
           whileInView={{ opacity: 1, x: 0 }}
