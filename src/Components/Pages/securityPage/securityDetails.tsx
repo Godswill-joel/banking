@@ -2,7 +2,7 @@ const securitySections = [
     {
       title: "How does River protect your funds?",
       links: [
-        { label: "Proof of Reserves", href: "#" },
+        { label: "Proof of Reserves", href: "/proofofreserve" },
         { label: "Multisig cold storage", href: "#" },
         { label: "FDIC-insured cash at Lead Bank", href: "#" },
         { label: "Custody not built on third-parties", href: "#" },
@@ -27,10 +27,7 @@ const securitySections = [
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between gap-12 text-left mt-16">
           {securitySections.map((section, index) => (
             <div key={index} className="w-full md:w-1/2">
-              {/* Section Title */}
               <h3 className="text-2xl font-semibold mb-4">{section.title}</h3>
-  
-              {/* Links List */}
               <ul className="space-y-2">
                 {section.links.map((link, i) => (
                   <li key={i}>
