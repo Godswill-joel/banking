@@ -28,7 +28,7 @@ export default function SecurityStandard() {
         },
     ];
     return (
-        <section className="w-full bg-[#0d0d0d] text-white py-24 px-6 md:px-20 flex flex-col items-center gap-16">
+        <section className=" bg-[#0d0d0d] text-white py-24 px-6 md:px-20 flex flex-col items-center gap-16">
             <h1 className="text-3xl md:text-5xl font-semibold leading-tight">
                 River has the highest security standards
             </h1>
