@@ -1,27 +1,23 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useUserData } from "@/lib/hook/useUserData";
 import {
     Wallet,
     TrendingUp,
-    TrendingDown,
     Bitcoin,
     DollarSign,
-    Euro,
     Send,
     Download,
     History,
     PieChart,
     ShieldCheck,
-    Bell,
     Eye,
     EyeOff,
     RefreshCw,
     ArrowUpRight,
     ArrowDownRight,
-    Zap,
-    Award,
-    Clock,
+    Zap
 } from "lucide-react";
 
 // Types
@@ -61,21 +57,22 @@ interface UserData {
 
 
 export default function RiverUserDashboard() {
+    const { userData, loading, error } = useUserData();
     const [currentTime, setCurrentTime] = useState(new Date());
     const [selectedCurrency, setSelectedCurrency] = useState<"USD" | "BTC" | "EUR">("USD");
     const [showBalance, setShowBalance] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState(false);
 
-    // Mock user data - replace with actual Firebase data
-    const [userData] = useState<UserData>({
-        firstName: "Charles",
-        lastName: "Doe",
-        email: "charles@river.com",
-        balance: 12450.50,
-        bitcoinBalance: 0.2847,
-        totalInvested: 8500,
-        activeLoans: 2,
-    });
+
+    // const [userData] = useState<UserData>({
+    //     firstName: "Charles",
+    //     lastName: "Doe",
+    //     email: "charles@river.com",
+    //     balance: 12450.50,
+    //     bitcoinBalance: 0.2847,
+    //     totalInvested: 8500,
+    //     activeLoans: 2,
+    // });
 
     // Mock crypto prices - replace with actual API
     const [cryptoPrices, setCryptoPrices] = useState<CryptoPrice[]>([
@@ -153,6 +150,25 @@ export default function RiverUserDashboard() {
         };
     }, []);
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="text-white text-xl animate-pulse">Loading dashboard...</div>
+            </div>
+        );
+    }
+
+    if (error || !userData) {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="text-red-500 text-center">
+                    <p className="text-2xl mb-2">Access Denied</p>
+                    <p>{error || "Please log in again."}</p>
+                </div>
+            </div>
+        );
+    }
+
     const formatTime = (date: Date) => {
         return date.toLocaleTimeString("en-US", {
             hour: "2-digit",
@@ -170,16 +186,27 @@ export default function RiverUserDashboard() {
     };
 
     const convertBalance = () => {
-        if (selectedCurrency === "USD") return userData.balance;
-        if (selectedCurrency === "BTC") return userData.bitcoinBalance;
-        return userData.balance * 0.92; // EUR conversion (mock)
+        if (selectedCurrency === "USD") return user.balance ?? 0;
+        if (selectedCurrency === "BTC") return user.bitcoinBalance ?? 0;
+        return (user.balance ?? 0) * 0.92;
     };
 
     const formatBalance = () => {
-        const balance = convertBalance();
-        if (selectedCurrency === "USD") return `$${balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-        if (selectedCurrency === "BTC") return `₿${balance.toFixed(8)}`;
-        return `€${balance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const balance = convertBalance() ?? 0;
+
+        if (selectedCurrency === "USD")
+            return `$${balance.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+
+        if (selectedCurrency === "BTC")
+            return `₿${balance.toFixed(8)}`;
+
+        return `€${balance.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
     };
 
     const handleRefresh = () => {
@@ -214,18 +241,21 @@ export default function RiverUserDashboard() {
         },
     ];
 
+
+
+    const user = userData!;
     const portfolioStats = [
         {
             label: "Total Invested",
-            value: `$${userData.totalInvested.toLocaleString()}`,
+            value: `$${(user.totalInvested ?? 0).toLocaleString()}`,
             change: "+12.5%",
             icon: PieChart,
             positive: true,
         },
         {
             label: "Active Loans",
-            value: userData.activeLoans.toString(),
-            change: "2 ongoing",
+            value: (user.activeLoans ?? 0).toString(),
+            change: `${user.activeLoans ?? 0} ongoing`,
             icon: ShieldCheck,
             positive: true,
         },

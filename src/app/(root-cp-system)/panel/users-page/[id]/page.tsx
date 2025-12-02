@@ -24,11 +24,15 @@ import {
     AlertTriangle,
     Activity,
     DollarSign,
+    FileText,
+    Plus,
+    X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/config";
+import { createTransaction, fetchTransactions } from "@/firebase/firebaseTransactions";
 
 
 
@@ -39,6 +43,19 @@ export default function UserProfileView() {
     const [userData, setUserData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState("overview");
+
+
+
+    const [showCreateTxModal, setShowCreateTxModal] = useState(false);
+    const [txType, setTxType] = useState<"deposit" | "withdraw" | "received" | "transfer">("deposit");
+    const [status, setStatus] = useState<"completed" | "pending" | "failed" | "reverted">("completed");
+    const [amount, setAmount] = useState("");
+    const [currency, setCurrency] = useState<"USD" | "BTC">("USD");
+    const [txDate, setTxDate] = useState("");
+    const [description, setDescription] = useState("");
+    const [creating, setCreating] = useState(false);
+    const [transactions, setTransactions] = useState<any[]>([]);
+
 
     useEffect(() => {
         console.log("userId param:", userId);
@@ -66,6 +83,16 @@ export default function UserProfileView() {
         fetchUser();
     }, [userId]);
 
+    useEffect(() => {
+        if (!userId) return;
+        const loadTransactions = async () => {
+            const userTxs = await fetchTransactions(userId);
+            setTransactions(userTxs);
+        };
+        loadTransactions();
+    }, [userId]);
+
+
     if (loading) {
         return <div className="text-center py-20">Loading user data...</div>;
     }
@@ -74,6 +101,16 @@ export default function UserProfileView() {
         return <div className="text-center py-20 text-red-600">User not found</div>;
     }
 
+  
+    const getStatusColor = (status: string) => {
+        switch (status) {
+            case 'completed': return 'bg-green-500';
+            case 'pending': return 'bg-yellow-500';
+            case 'failed': return 'bg-red-500';
+            case 'reverted': return 'bg-orange-500';
+            default: return 'bg-gray-500';
+        }
+    };
 
     const tabs = [
         { id: "overview", label: "Overview", icon: User },
@@ -103,6 +140,21 @@ export default function UserProfileView() {
             change: userData.kycVerified ? "Active" : "Review",
         },
     ];
+
+    const handleCreate = () => {
+        if (!amount || parseFloat(amount) <= 0) {
+            alert("Enter valid amount");
+            return;
+        }
+        setCreating(true);
+        // Simulate creation
+        setTimeout(() => {
+            setCreating(false);
+            setShowCreateTxModal(false);
+            setAmount('');
+            setDescription('');
+        }, 1500);
+    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 p-4 md:p-6 lg:p-8">
@@ -367,34 +419,8 @@ export default function UserProfileView() {
                                                     </p>
 
                                                 </div>
-                                            </div>
+                                            </div>                                          
 
-                                            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                                                <Activity size={18} className="text-gray-400 mt-1" />
-                                                <div>
-                                                    <p className="text-xs text-black font-medium">
-                                                        Last Login
-                                                    </p>
-                                                    <p className=" text-black">
-                                                        {userData.lastLogin.toDate
-                                                            ? userData.createdAt.toDate().toLocaleDateString()
-                                                            : new Date(userData.lastLogin.seconds * 1000).toLocaleDateString()}
-                                                    </p>
-
-                                                </div>
-                                            </div>
-
-                                            <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
-                                                <TrendingUp size={18} className="text-gray-400 mt-1" />
-                                                <div>
-                                                    <p className="text-xs text-gray-500 font-medium">
-                                                        Last Funded
-                                                    </p>
-                                                    <p className="text-sm text-gray-900 font-semibold">
-                                                        {userData.lastFunded || "Never"}
-                                                    </p>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -521,20 +547,316 @@ export default function UserProfileView() {
 
                         {/* Transactions Tab */}
                         {activeTab === "transactions" && (
-                            <div className="animate-fadeIn">
-                                <div className="text-center py-12">
-                                    <Activity size={64} className="text-gray-300 mx-auto mb-4" />
-                                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                                        No Transactions Yet
-                                    </h3>
-                                    <p className="text-gray-600 text-sm">
-                                        This user hasn&apos;t made any transactions yet.
-                                    </p>
+                            <div>
+                                <div className="flex justify-between items-center mb-6">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-gray-900">Transaction History</h3>
+                                        <p className="text-sm text-gray-500 mt-1">View and manage all transactions</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowCreateTxModal(true)}
+                                        className="px-5 py-2.5 bg-gradient-to-r from-gray-900 to-gray-700 text-white rounded-xl font-semibold hover:from-gray-800 hover:to-gray-600 transition-all shadow-lg hover:shadow-xl flex items-center gap-2"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        Create Transaction
+                                    </button>
                                 </div>
+
+                                {transactions.length === 0 ? (
+                                    <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+                                        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <Activity size={40} className="text-gray-400" />
+                                        </div>
+                                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                            No Transactions Yet
+                                        </h3>
+                                        <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+                                            This user hasn&apos;t made any transactions yet. Click the button above to create their first transaction.
+                                        </p>
+                                        <button
+                                            onClick={() => setShowCreateTxModal(true)}
+                                            className="px-5 py-2.5 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-all inline-flex items-center gap-2"
+                                        >
+                                            <Plus className="w-4 h-4" />
+                                            Create First Transaction
+                                        </button>
+                                    </div>
+                                ) : (
+                                    <div className="overflow-hidden border border-gray-200 rounded-2xl shadow-sm">
+                                        <div className="overflow-x-auto">
+                                            <table className="min-w-full divide-y divide-gray-200">
+                                                <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
+                                                    <tr>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                                            Date
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                                            Type
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                                            Amount
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                                            Currency
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                                            Status
+                                                        </th>
+                                                        <th className="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">
+                                                            Description
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="bg-white divide-y divide-gray-200">
+                                                    {transactions.map((tx) => (
+                                                        <tr key={tx.id} className="hover:bg-gray-50 transition-colors">
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                                                                {tx.date}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${tx.type === 'deposit'
+                                                                    ? 'bg-green-100 text-green-800'
+                                                                    : 'bg-red-100 text-red-800'
+                                                                    }`}>
+                                                                    <div className={`w-1.5 h-1.5 rounded-full ${tx.type === 'deposit' ? 'bg-green-500' : 'bg-red-500'
+                                                                        }`} />
+                                                                    {tx.type === 'deposit' ? 'Deposit' : 'Withdraw'}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                                                                {tx.currency === 'USD' ? '$' : '₿'}{tx.amount.toLocaleString()}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-medium">
+                                                                {tx.currency}
+                                                            </td>
+                                                            <td className="px-6 py-4 whitespace-nowrap">
+                                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${tx.status === 'completed'
+                                                                    ? 'bg-blue-100 text-blue-800'
+                                                                    : tx.status === 'pending'
+                                                                        ? 'bg-yellow-100 text-yellow-800'
+                                                                        : 'bg-gray-100 text-gray-800'
+                                                                    }`}>
+                                                                    {tx.status}
+                                                                </span>
+                                                            </td>
+                                                            <td className="px-6 py-4 text-sm text-gray-600 max-w-xs truncate">
+                                                                {tx.description || '—'}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         )}
+
                     </div>
                 </div>
+
+
+                {showCreateTxModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+                        <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg lg:max-w-2xl overflow-hidden max-h-[95vh] flex flex-col transform transition-all duration-300 ease-out scale-100 opacity-100">
+
+                            {/* Modal Header */}
+                            <div className="bg-indigo-600 px-6 py-4 flex justify-between items-center flex-shrink-0">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                                        <Plus className="w-4 h-4 text-white" />
+                                    </div>
+                                    <h2 className="text-xl font-semibold text-white">Create New Transaction</h2>
+                                </div>
+                                <button
+                                    onClick={() => setShowCreateTxModal(false)}
+                                    className="p-1 rounded-full text-white hover:bg-white/10 transition-colors group"
+                                    aria-label="Close modal"
+                                >
+                                    <X className="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" />
+                                </button>
+                            </div>
+
+                            {/* Modal Content */}
+                            <div className="p-6 overflow-y-auto flex-grow">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+
+                                    {/* Transaction Type */}
+                                    <div className="space-y-2">
+                                        <label htmlFor="txTypeSelect" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                            <div className={`w-2.5 h-2.5 rounded-full ${txType === 'deposit' ? 'bg-green-500' : 'bg-red-500'} transition-colors`} />
+                                            Transaction Type
+                                        </label>
+                                        <select
+                                            id="txTypeSelect"
+                                            value={txType}
+                                            onChange={(e) => setTxType(e.target.value as "deposit" | "withdraw" | "received" | "transfer")}
+                                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-normal text-gray-800 shadow-sm appearance-none"
+                                        >
+                                            <option value="deposit">Deposit</option>
+                                            <option value="withdraw">Withdraw</option>
+                                            <option value="transfer">Transfer</option>
+                                            <option value="received">Received</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Transaction Status - NEW SECTION */}
+                                    <div className="space-y-2">
+                                        <label htmlFor="statusSelect" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                            <div className={`w-2.5 h-2.5 rounded-full ${getStatusColor('completed')} transition-colors`} />
+                                            Transaction Status
+                                        </label>
+                                        <select
+                                            id="statusSelect"
+                                            value={status}
+                                            onChange={(e) => setStatus(e.target.value as "completed" | "pending" | "failed" | "reverted")}
+                                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-normal text-gray-800 shadow-sm appearance-none"
+                                        >
+                                            <option value="completed">Completed</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="failed">Failed</option>
+                                            <option value="reverted">Reverted</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Amount */}
+                                    <div className="space-y-2">
+                                        <label htmlFor="amountInput" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                            <DollarSign className="w-4 h-4 text-gray-500" />
+                                            Amount
+                                        </label>
+                                        <div className="relative">
+                                            <input
+                                                id="amountInput"
+                                                type="number"
+                                                value={amount}
+                                                onChange={(e) => setAmount(e.target.value)}
+                                                placeholder="0.00"
+                                                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-medium text-gray-900 shadow-sm pr-12"
+                                            />
+                                            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 font-semibold text-sm">
+                                                {currency === 'USD' ? '$' : '₿'}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Currency */}
+                                    <div className="space-y-2">
+                                        <label htmlFor="currencySelect" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                            <div className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+                                            Currency
+                                        </label>
+                                        <select
+                                            id="currencySelect"
+                                            value={currency}
+                                            onChange={(e) => setCurrency(e.target.value as "USD" | "BTC")}
+                                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-normal text-gray-800 shadow-sm appearance-none"
+                                        >
+                                            <option value="USD">USD ($)</option>
+                                            <option value="BTC">Bitcoin (₿)</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Date */}
+                                    <div className="space-y-2">
+                                        <label htmlFor="dateInput" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                            <Calendar className="w-4 h-4 text-gray-500" />
+                                            Date
+                                        </label>
+                                        <input
+                                            id="dateInput"
+                                            type="date"
+                                            value={txDate}
+                                            onChange={(e) => setTxDate(e.target.value)}
+                                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-normal text-gray-900 shadow-sm"
+                                        />
+                                    </div>
+
+                                    {/* Description */}
+                                    <div className="md:col-span-2 space-y-2">
+                                        <label htmlFor="descriptionTextarea" className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                            <FileText className="w-4 h-4 text-gray-500" />
+                                            Description
+                                            <span className="text-xs text-gray-400 font-normal">(Optional)</span>
+                                        </label>
+                                        <textarea
+                                            id="descriptionTextarea"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                            className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-normal text-gray-900 shadow-sm resize-none"
+                                            placeholder="Add a note about this transaction..."
+                                            rows={3}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="px-6 py-4 flex justify-end gap-3 border-t border-gray-200 flex-shrink-0">
+                                <button
+                                    onClick={() => setShowCreateTxModal(false)}
+                                    className="px-5 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    onClick={async () => {
+                                        if (!amount || parseFloat(amount) <= 0) {
+                                            alert("Please enter a valid amount");
+                                            return;
+                                        }
+
+                                        setCreating(true);
+
+                                        // Create transaction with proper status
+                                        await createTransaction(userId!, {
+                                            type: txType,
+                                            amount: parseFloat(amount),
+                                            currency,
+                                            status: status, // Use the status state
+                                            date: txDate || new Date().toISOString().split('T')[0],
+                                            description: description || `${txType.charAt(0).toUpperCase() + txType.slice(1)} via admin panel`,
+                                            createdAt: new Date().toISOString(),
+                                        });
+
+                                        // Refresh user data and transactions
+                                        const userRef = doc(db, "users", userId!);
+                                        const updatedUserSnap = await getDoc(userRef);
+                                        if (updatedUserSnap.exists()) {
+                                            setUserData(updatedUserSnap.data());
+                                        }
+
+                                        const userTxs = await fetchTransactions(userId!);
+                                        setTransactions(userTxs);
+
+                                        // Reset form
+                                        setShowCreateTxModal(false);
+                                        setAmount("");
+                                        setDescription("");
+                                        setTxDate("");
+                                        setStatus("completed"); // Reset to default
+                                        setCreating(false);
+                                    }}
+                                    disabled={creating || !amount}
+                                    className="px-5 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                                >
+                                    {creating ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            Creating...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Plus className="w-4 h-4" />
+                                            Create Transaction
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
 
             <style jsx>{`
