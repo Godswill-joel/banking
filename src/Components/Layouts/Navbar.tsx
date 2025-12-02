@@ -28,7 +28,7 @@ const navigation: NavigationType = {
     { name: 'Announcement', href: '#' },
   ],
   about: [
-    { name: 'Company', href: '#' },
+    { name: 'Company', href: '/about' },
     { name: 'Security', href: '/securityPage' },
     { name: 'Proof of reserves', href: '#' },
     { name: 'Company financials', href: '#' },
