@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
@@ -37,7 +37,6 @@ const navigation: NavigationType = {
   ],
 };
 
-
 const navItems = [
   { label: 'Individuals', key: 'individuals', hasDropdown: true },
   { label: 'Private Clients', key: 'private', href: '/privateriver' },
@@ -46,36 +45,24 @@ const navItems = [
   { label: 'About', key: 'about', hasDropdown: true },
 ];
 
-
-
 const Dropdown = ({ items }: { items: NavItem[] }) => (
-  <div className="absolute left-0 mt-2 w-72 bg-gray-100 rounded-lg shadow-xl border border-gray-200 py-2 z-50">
+  <div className="absolute left-0 top-full mt-2 w-72 bg-gray-100 rounded-lg shadow-xl border border-gray-200 py-2 z-50">
     {items.map(({ name, href, desc }) => (
-      <a key={name} href={href} className="block px-4 py-3 hover:bg-gray-200">
-        <div className="font-medium text-gray-900">{name}</div>
-        {desc && <p className="text-sm text-gray-600">{desc}</p>}
+      <a key={name} href={href} className="block px-4 py-3 hover:bg-gray-200 transition-colors duration-200">
+        <div className="font-normal text-gray-900 text-base">{name}</div>
+        {desc && <p className="text-sm text-gray-600 mt-1">{desc}</p>}
       </a>
     ))}
   </div>
 );
 
-
 export default function Navbar() {
-  type NavItem = {
-    name: string;
-    href: string;
-    desc?: string;
-  };
-
-  type NavigationKeys = 'individuals' | 'learn' | 'about';
-
-  type NavigationType = Record<NavigationKeys, NavItem[]>;
-
   const [scrolled, setScrolled] = useState(false);
   const [mobile, setMobile] = useState(false);
-
-
   const [mobileDropdown, setMobileDropdown] = useState<string | null>(null);
+  const [hoveredDropdown, setHoveredDropdown] = useState<string | null>(null);
+
+  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -87,100 +74,115 @@ export default function Navbar() {
     setMobileDropdown(prev => (prev === key ? null : key));
   };
 
+  const handleMouseEnter = (key: string) => {
+    setHoveredDropdown(key);
+  };
+
+  const handleMouseLeave = (event: React.MouseEvent) => {
+    const relatedTarget = event.relatedTarget as Node;
+    const dropdownElement = dropdownRefs.current[hoveredDropdown || ''];
+
+    if (dropdownElement && dropdownElement.contains(relatedTarget)) {
+      return; 
+    }
+
+    setHoveredDropdown(null);
+  };
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#131313] shadow-md' : 'bg-[#131313]/95 backdrop-blur-sm'
         }`}
     >
-      <div className="max-w-8xl mx-auto flex h-26 items-center justify-between px-4 sm:px-6 md:px-10">
+      <div className="max-w-8xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6 md:px-10">
+        <Image src="/Logo/logo.svg" alt="Logo" width={150} height={40} priority />
 
-        <Image src="/Logo/logo.svg" alt="Logo" width={150} height={100} priority />
-
-        {/* DESKTOP NAV (UNCHANGED) */}
+    
         <div className="hidden md:flex items-center space-x-1">
           {navItems.map(({ label, key, hasDropdown, href }) => (
             <div
               key={key}
-              className="relative group"
+              className="relative"
+              onMouseEnter={() => hasDropdown && handleMouseEnter(key)}
+              onMouseLeave={handleMouseLeave}
+              ref={el => dropdownRefs.current[key] = el}
             >
               <a
                 href={href || '#'}
-                className="px-4 py-2 text-2xl font-medium text-[#F9F9F9] hover:bg-gray-700/60 rounded-md"
+                className="px-4 py-2 text-base font-normal text-[#F9F9F9] hover:bg-gray-700/60 rounded-md transition-colors duration-200"
               >
                 {label}
+                {hasDropdown && (
+                  <ChevronDownIcon className="inline-block ml-1 h-4 w-4" />
+                )}
               </a>
 
-              {hasDropdown && (
-                <div className="hidden group-hover:block">
-                 <Dropdown items={navigation[key as NavigationKeys]} />
-                </div>
+              {hasDropdown && hoveredDropdown === key && (
+                <Dropdown items={navigation[key as NavigationKeys]} />
               )}
             </div>
           ))}
 
-          <p className="px-5 text-2xl">
+          <p className="px-5 text-base font-normal">
             BTC Price:
-            <span className="text-[#C5A063] text-2xl">$103,408.78</span>
+            <span className="text-[#C5A063] text-base ml-1">$103,408.78</span>
           </p>
         </div>
 
-        {/* Desktop Auth */}
+
         <div className="hidden md:flex items-center space-x-3">
-          <a className="px-5 py-2 text-2xl text-[#F9F9F9] hover:bg-gray-700/60 rounded-2xl">Log in</a>
-          <a className="px-5 py-2 text-2xl font-medium bg-[#C5A063] text-black hover:bg-[#b08a53] rounded-2xl">Sign up</a>
+          <a className="px-4 py-2 text-base font-normal text-[#F9F9F9] hover:bg-gray-700/60 rounded-2xl transition-colors duration-200">
+            Log in
+          </a>
+          <a className="px-4 py-2 text-base font-normal bg-[#C5A063] text-black hover:bg-[#b08a53] rounded-2xl transition-colors duration-200">
+            Sign up
+          </a>
         </div>
 
-        {/* Mobile Toggle */}
         <button
           onClick={() => setMobile(!mobile)}
           className="md:hidden p-2 text-[#F9F9F9]"
         >
-          {mobile ? <XMarkIcon className="h-7 w-7" /> : <Bars3Icon className="h-7 w-7" />}
+          {mobile ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
         </button>
       </div>
 
-      {/* MOBILE MENU */}
       {mobile && (
-        <div className="md:hidden bg-[#131313] text-white px-4 py-4 space-y-4">
-
-          {/* MOBILE NAV ITEMS */}
+        <div className="md:hidden bg-[#131313] text-white px-4 py-4 space-y-2">
           {navItems.map(({ label, key, hasDropdown, href }) => (
-            <div key={key} className="w-full">
-
-              {/* --- clickable row --- */}
+            <div key={key} className="w-full border-b border-gray-700 last:border-b-0">
               <button
-                className="flex justify-between w-full py-3 text-left text-lg font-semibold"
+                className="flex justify-between items-center w-full py-3 text-left text-base font-normal"
                 onClick={() => {
                   if (hasDropdown) {
                     toggleMobileDropdown(key);
                   } else if (href) {
                     window.location.href = href;
+                    setMobile(false);
                   }
                 }}
               >
                 {label}
-
-                {hasDropdown ? (
+                {hasDropdown && (
                   mobileDropdown === key ? (
-                    <XMarkIcon className="h-5 w-5 text-gray-300" />
+                    <XMarkIcon className="h-4 w-4 text-gray-300" />
                   ) : (
-                    <ChevronDownIcon className="h-5 w-5 text-gray-300" />
+                    <ChevronDownIcon className="h-4 w-4 text-gray-300" />
                   )
-                ) : null}
+                )}
               </button>
 
-              {/* --- MOBILE DROPDOWN CONTENT --- */}
               {hasDropdown && mobileDropdown === key && (
-                <div
-                  className="pl-4 overflow-hidden animate-slideDown"
-                >
-                  {navigation[key as NavigationKeys].map(({ name, href }: NavItem) => (
+                <div className="pl-4 pb-2 overflow-hidden animate-slideDown">
+                  {navigation[key as NavigationKeys].map(({ name, href, desc }) => (
                     <a
                       key={name}
                       href={href}
-                      className="block py-2 text-sm text-gray-300 hover:text-white"
+                      className="block py-2 text-sm text-gray-300 hover:text-white transition-colors duration-200"
+                      onClick={() => setMobile(false)}
                     >
-                      {name}
+                      <div className="font-normal">{name}</div>
+                      {desc && <p className="text-xs text-gray-400 mt-1">{desc}</p>}
                     </a>
                   ))}
                 </div>
@@ -188,14 +190,23 @@ export default function Navbar() {
             </div>
           ))}
 
-          {/* SIGN IN / OUT */}
-          <div className="pt-4 space-y-3 border-t border-gray-700">
-            <a className="block text-center py-2 border border-gray-600 rounded-lg">Sign in</a>
-            <a className="block text-center py-2 bg-[#C5A063] text-black rounded-lg">Get started</a>
+          <div className="pt-2 pb-2 border-b border-gray-700">
+            <p className="text-base font-normal text-gray-300">
+              BTC Price: <span className="text-[#C5A063]">$103,408.78</span>
+            </p>
+          </div>
+
+    
+          <div className="pt-2 space-y-3">
+            <a className="block text-center py-2 text-base font-normal border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors duration-200">
+              Sign in
+            </a>
+            <a className="block text-center py-2 text-base font-normal bg-[#C5A063] text-black rounded-lg hover:bg-[#b08a53] transition-colors duration-200">
+              Get started
+            </a>
           </div>
         </div>
       )}
     </nav>
   );
 }
-
