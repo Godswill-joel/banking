@@ -429,7 +429,6 @@ export default function AddUserPage() {
                                             className="w-full pl-11 pr-4 py-3 border-2 border-gray-200 text-black rounded-xl focus:border-blue-500 focus:outline-none transition-all appearance-none bg-white"
                                         >
                                             <option value="user">User</option>
-                                            <option value="moderator">Moderator</option>
                                             <option value="admin">Admin</option>
                                         </select>
                                     </div>

@@ -16,6 +16,7 @@ import {
   Mic,
   X,
 } from "lucide-react";
+import { listenToUserChats, listenToMessages, sendMessage } from "@/firebase/sendMessage";
 
 interface Message {
   id: number;
@@ -40,103 +41,74 @@ interface Chat {
 
 export default function ChatPage() {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedChat, setSelectedChat] = useState<number | null>(1);
   const [message, setMessage] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [selectedChat, setSelectedChat] = useState<string | null>(null);
+  const [unsubscribeChats, setUnsubscribeChats] = useState<() => void>();
+  const [unsubscribeMessages, setUnsubscribeMessages] = useState<() => void>();
 
-  const chats: Chat[] = [
-    {
-      id: 1,
-      user: "John Doe",
-      avatar: "JD",
-      lastMessage: "I need help with my loan application",
-      time: "2 min ago",
-      unread: 2,
-      status: "online",
-      typing: false,
-    },
-    {
-      id: 2,
-      user: "Sarah Wilson",
-      avatar: "SW",
-      lastMessage: "Thank you for your assistance!",
-      time: "1 hour ago",
-      unread: 0,
-      status: "online",
-    },
-    {
-      id: 3,
-      user: "Mike Johnson",
-      avatar: "MJ",
-      lastMessage: "When will my withdrawal be processed?",
-      time: "3 hours ago",
-      unread: 1,
-      status: "offline",
-    },
-    {
-      id: 4,
-      user: "Emily Brown",
-      avatar: "EB",
-      lastMessage: "Can I increase my loan limit?",
-      time: "Yesterday",
-      unread: 0,
-      status: "offline",
-    },
-    {
-      id: 5,
-      user: "David Lee",
-      avatar: "DL",
-      lastMessage: "Payment confirmation received",
-      time: "Yesterday",
-      unread: 0,
-      status: "online",
-    },
-  ];
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Hello! I have a question about my loan application status.",
-      sender: "user",
-      time: "2:30 PM",
-      status: "read",
-      type: "text",
-    },
-    {
-      id: 2,
-      text: "Hello John! I'd be happy to help you with that. Let me check your application status.",
-      sender: "admin",
-      time: "2:31 PM",
-      status: "read",
-      type: "text",
-    },
-    {
-      id: 3,
-      text: "Your loan application is currently under review. Our team will get back to you within 24 hours.",
-      sender: "admin",
-      time: "2:31 PM",
-      status: "read",
-      type: "text",
-    },
-    {
-      id: 4,
-      text: "Thank you! Is there anything else I need to provide?",
-      sender: "user",
-      time: "2:32 PM",
-      status: "delivered",
-      type: "text",
-    },
-    {
-      id: 5,
-      text: "I need help with my loan application",
-      sender: "user",
-      time: "2:35 PM",
-      status: "sent",
-      type: "text",
-    },
-  ]);
+  useEffect(() => {
+    // Listen to all user chats
+    const unsub = listenToUserChats((fetchedChats) => {
+      const formatted = fetchedChats.map((chat: any) => ({
+        id: chat.id,
+        user: chat.userName || "User",
+        avatar: chat.userName?.split(" ").map((n: string) => n[0]).join("").toUpperCase() || "U",
+        lastMessage: chat.lastMessage || "No messages yet",
+        time: chat.lastMessageTime?.toDate?.()?.toLocaleTimeString?.([], { hour: "2-digit", minute: "2-digit" }) || "",
+        unread: chat.unreadCount || 0,
+        status: "online" as const, // You can improve with last seen
+      }));
+      setChats(formatted);
+
+      // Auto-select first chat if none selected
+      if (!selectedChat && fetchedChats.length > 0) {
+        setSelectedChat(fetchedChats[0].id);
+      }
+    });
+
+    setUnsubscribeChats(() => unsub);
+    return () => unsub();
+  }, []);
+
+  // When a chat is selected → load its messages
+  useEffect(() => {
+    if (!selectedChat) {
+      setMessages([]);
+      unsubscribeMessages?.();
+      return;
+      return;
+    }
+
+    const unsub = listenToMessages(selectedChat, (fetchedMessages) => {
+      const formatted = fetchedMessages.map((msg: any) => ({
+        id: msg.id,
+        text: msg.text || "",
+        sender: msg.sender as "user" | "admin",
+        time: msg.timestamp?.toDate?.()?.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) || "Now",
+        status: msg.status || "read",
+        type: "text" as const,
+      }));
+      setMessages(formatted);
+    });
+
+    setUnsubscribeMessages(() => unsub);
+    return () => unsub();
+  }, [selectedChat]);
+
+  // Update handleSendMessage
+  const handleSendMessage = async () => {
+    if (!message.trim() || !selectedChat) return;
+
+    await sendMessage(selectedChat, message);
+    setMessage("");
+  };
+
 
   useEffect(() => {
     scrollToBottom();
@@ -146,23 +118,7 @@ export default function ChatPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      const newMessage: Message = {
-        id: messages.length + 1,
-        text: message,
-        sender: "admin",
-        time: new Date().toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-        status: "sent",
-        type: "text",
-      };
-      setMessages([...messages, newMessage]);
-      setMessage("");
-    }
-  };
+
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -218,8 +174,8 @@ export default function ChatPage() {
                   key={chat.id}
                   onClick={() => setSelectedChat(chat.id)}
                   className={`p-4 border-b border-gray-100 cursor-pointer transition-all hover:bg-blue-50/50 ${selectedChat === chat.id
-                      ? "bg-blue-50 border-l-4 border-l-blue-600"
-                      : ""
+                    ? "bg-blue-50 border-l-4 border-l-blue-600"
+                    : ""
                     }`}
                 >
                   <div className="flex items-center gap-3">
@@ -246,8 +202,8 @@ export default function ChatPage() {
                       <div className="flex items-center justify-between">
                         <p
                           className={`text-sm truncate ${chat.unread > 0
-                              ? "text-gray-900 font-semibold"
-                              : "text-gray-600"
+                            ? "text-gray-900 font-semibold"
+                            : "text-gray-600"
                             }`}
                         >
                           {chat.typing ? (
@@ -327,8 +283,8 @@ export default function ChatPage() {
                   >
                     <div
                       className={`max-w-[70%] md:max-w-[60%] ${msg.sender === "admin"
-                          ? "bg-gradient-to-br from-blue-600 to-purple-600 text-white"
-                          : "bg-white shadow-md"
+                        ? "bg-gradient-to-br from-blue-600 to-purple-600 text-white"
+                        : "bg-white shadow-md"
                         } rounded-2xl px-4 py-3 transition-all hover:scale-[1.02]`}
                     >
                       <p
@@ -339,8 +295,8 @@ export default function ChatPage() {
                       </p>
                       <div
                         className={`flex items-center justify-end gap-1 mt-1 ${msg.sender === "admin"
-                            ? "text-blue-100"
-                            : "text-gray-500"
+                          ? "text-blue-100"
+                          : "text-gray-500"
                           }`}
                       >
                         <span className="text-xs">{msg.time}</span>

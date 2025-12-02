@@ -1,8 +1,9 @@
-'use client'
+"use client";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getUserRole } from "./checkRole";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -40,5 +41,43 @@ export async function loginUser(email: string, password: string) {
   }
 }
 
+export async function loginUserWithRole(
+  email: string,
+  password: string
+): Promise<{
+  success: boolean;
+  user?: any;
+  allowed?: boolean;
+  message?: string;
+}> {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
 
+    const role = await getUserRole(user.uid);
 
+    if (!role) {
+      return {
+        success: true,
+        allowed: false,
+        message: "User profile not found.",
+      };
+    }
+
+    if (role !== "user") {
+      await auth.signOut();
+      return {
+        success: true,
+        allowed: false,
+        message: "Access denied. This portal is only for users.",
+      };
+    }
+    return { success: true, allowed: true, user, message: "Login successful" };
+  } catch (error: any) {
+    return { success: false, message: error.message };
+  }
+}
