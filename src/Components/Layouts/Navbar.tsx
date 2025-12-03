@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
@@ -33,7 +33,7 @@ const navigation: NavigationType = {
     { name: 'Proof of reserves', href: '#' },
     { name: 'Company financials', href: '#' },
     { name: 'Partners', href: '#' },
-    { name: 'Contact support', href: '#' },
+    { name: 'Contact support', href: '/contactSupport' },
   ],
 };
 
@@ -83,11 +83,17 @@ export default function Navbar() {
     const dropdownElement = dropdownRefs.current[hoveredDropdown || ''];
 
     if (dropdownElement && dropdownElement.contains(relatedTarget)) {
-      return; 
+      return;
     }
 
     setHoveredDropdown(null);
   };
+  const setDropdownRef = useCallback(
+    (key: string) => (el: HTMLDivElement | null) => {
+      dropdownRefs.current[key] = el;
+    },
+    []
+  );
 
   return (
     <nav
@@ -97,7 +103,7 @@ export default function Navbar() {
       <div className="max-w-8xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6 md:px-10">
         <Image src="/Logo/logo.svg" alt="Logo" width={150} height={40} priority />
 
-    
+
         <div className="hidden md:flex items-center space-x-1">
           {navItems.map(({ label, key, hasDropdown, href }) => (
             <div
@@ -105,7 +111,9 @@ export default function Navbar() {
               className="relative"
               onMouseEnter={() => hasDropdown && handleMouseEnter(key)}
               onMouseLeave={handleMouseLeave}
-              ref={el => dropdownRefs.current[key] = el}
+              ref={(el) => {
+                dropdownRefs.current[key] = el;
+              }}              
             >
               <a
                 href={href || '#'}
@@ -196,7 +204,7 @@ export default function Navbar() {
             </p>
           </div>
 
-    
+
           <div className="pt-2 space-y-3">
             <a className="block text-center py-2 text-base font-normal border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors duration-200">
               Sign in
