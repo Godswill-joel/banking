@@ -32,7 +32,7 @@ const navigation: NavigationType = {
     { name: 'Security', href: '/securityPage' },
     { name: 'Proof of reserves', href: '#' },
     { name: 'Company financials', href: '#' },
-    { name: 'Partners', href: '#' },
+    { name: 'Partners', href: '/patners' },
     { name: 'Contact support', href: '/contactSupport' },
   ],
 };

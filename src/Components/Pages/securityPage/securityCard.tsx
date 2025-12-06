@@ -47,16 +47,16 @@ export default function SecurityCards() {
                                 <Image
                                     src={card.img}
                                     alt={card.title}
-                                    width={480}          
-                                    height={150}          
-                                    className="object-contain"  
+                                    width={480}
+                                    height={150}
+                                    className="object-contain"
                                     priority={false}
                                 />
                                 <div className="absolute inset-0 rounded-3xl ring-1 ring-black/20 pointer-events-none" />
                             </div>
 
-                            <div className="px-8 py-10 bg-black/45 backdrop-blur-sm">
-                                <p className="text-sm text-[#C5A063] mb-2">{card.subtitle}</p>
+                            <div className="px-8 py-10 bg-black/45  text-center backdrop-blur-sm">
+
 
                                 <h3 className="text-2xl md:text-3xl font-semibold leading-tight text-white mb-4">
                                     {card.title}
