@@ -88,12 +88,7 @@ export default function Navbar() {
 
     setHoveredDropdown(null);
   };
-  const setDropdownRef = useCallback(
-    (key: string) => (el: HTMLDivElement | null) => {
-      dropdownRefs.current[key] = el;
-    },
-    []
-  );
+  
 
   return (
     <nav

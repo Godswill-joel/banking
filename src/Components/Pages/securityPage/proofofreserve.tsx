@@ -17,7 +17,7 @@ export default function ProofOfReserves() {
             hold the bitcoin we say we do. We do not lend out your bitcoin.
           </p>
           <button className="bg-[#d3a867] hover:bg-[#ba8e50] transition text-black font-medium px-6 py-3 rounded-xl shadow-md">
-            Verify River's reserves
+            Verify River&apos;s reserves
           </button>
         </div>
         <div className="flex-1 flex flex-col items-center  py-1 px-1 text-center shadow-xl">

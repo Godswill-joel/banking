@@ -10,7 +10,7 @@ export default function SupportSection() {
           <h1 className="text-4xl font-semibold mb-6">Support</h1>
 
           <p className="text-gray-300 leading-relaxed mb-10 max-w-lg">
-            We're here to help. Our help center contains answers to the most
+            We&apos;re here to help. Our help center contains answers to the most
             frequently asked questions. Alternatively, you can always reach us
             during the hours listed below:
           </p>
