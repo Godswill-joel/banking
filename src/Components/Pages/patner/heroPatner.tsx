@@ -3,8 +3,6 @@
 export default function HeroPartnerSection() {
   return (
     <section className="relative w-full min-h-screen bg-gradient-to-br from-black to-[#111] text-white px-5 pt-28 sm:pt-32 lg:pt-60 pb-16 overflow-hidden">
-
-      {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center opacity-40 pointer-events-none"
         style={{ backgroundImage: "url('/assets/glow-effect-4.svg')" }}
@@ -12,8 +10,6 @@ export default function HeroPartnerSection() {
 
       <div className="relative max-w-7xl mx-auto flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-
-          {/* LEFT CONTENT */}
           <div className="text-center lg:text-left">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-semibold leading-tight mb-6">
               Earn <span className="text-[#D3AC6A]">25%</span><br />
@@ -31,8 +27,6 @@ export default function HeroPartnerSection() {
               Apply now
             </button>
           </div>
-
-          {/* RIGHT IMAGE */}
           <div className="flex justify-center lg:justify-end">
             <img
               src="/assets/partner-hero-.webp"

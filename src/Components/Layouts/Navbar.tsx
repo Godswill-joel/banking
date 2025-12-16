@@ -9,7 +9,7 @@ type NavItem = {
   desc?: string;
 };
 
-type NavigationKeys = 'individuals' | 'learn' | 'about';
+type NavigationKeys = 'individuals' |  'about';
 
 type NavigationType = Record<NavigationKeys, NavItem[]>;
 
@@ -21,17 +21,12 @@ const navigation: NavigationType = {
     { name: 'Inheritance', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
     { name: 'River Rewards', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
   ],
-  learn: [
-    { name: 'Learn', href: '/privateriver' },
-    { name: 'Research', href: '#' },
-    { name: 'Support', href: '#' },
-    { name: 'Announcement', href: '#' },
-  ],
+
   about: [
     { name: 'Company', href: '/about' },
     { name: 'Security', href: '/securityPage' },
     { name: 'Proof of reserves', href: '#' },
-    { name: 'Company financials', href: '#' },
+    { name: 'Company financials', href: '/companyfinancials' },
     { name: 'Partners', href: '/patners' },
     { name: 'Contact support', href: '/contactSupport' },
   ],
@@ -41,7 +36,6 @@ const navItems = [
   { label: 'Individuals', key: 'individuals', hasDropdown: true },
   { label: 'Private Clients', key: 'private', href: '/privateriver' },
   { label: 'Business', key: 'business', href: '#' },
-  { label: 'Learn', key: 'learn', hasDropdown: true },
   { label: 'About', key: 'about', hasDropdown: true },
 ];
 
