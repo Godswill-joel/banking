@@ -68,7 +68,7 @@ export default function PrivateClientHero() {
               className="object-cover w-full h-auto"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] from-19% via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] from-8% via-transparent to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-tr from-[#0a0a0a] from-15% via-transparent to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a]/50 via-transparent to-transparent" />
           </div>
