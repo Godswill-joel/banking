@@ -15,9 +15,10 @@ type NavigationType = Record<NavigationKeys, NavItem[]>;
 
 const navigation: NavigationType = {
   individuals: [
-    { name: 'Buy & sell', href: '#', desc: 'Purchase bitcoin with low fees' },
-    { name: 'Bitcoin interest on Cash', href: '#', desc: 'Convert bitcoin to cash instantly' },
-    { name: 'Wallet & Custody', href: '#', desc: 'Earn yield on your bitcoin' },
+    { name: 'Buy & sell', href: '/buy-bitcoin', desc: 'Purchase bitcoin with low fees' },
+    { name: 'Bitcoin interest on Cash', href: '/bitcoin-interest', desc: 'Convert bitcoin to cash instantly' },
+    { name: ' Zero-Fee Recurring Buys', href: '/zero-fee', desc: 'Pay $0 in fees on recurring buys' },
+    { name: 'Wallet & Custody', href: '/wallet', desc: 'Earn yield on your bitcoin' },
     { name: 'Inheritance', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
     { name: 'River Rewards', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
   ],
