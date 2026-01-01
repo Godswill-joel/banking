@@ -26,8 +26,7 @@ const navigation: NavigationType = {
   about: [
     { name: 'Company', href: '/about' },
     { name: 'Security', href: '/securityPage' },
-    { name: 'Proof of reserves', href: '#' },
-    { name: 'Company financials', href: '/companyfinancials' },
+    { name: 'Company financials', href: '/financials' },
     { name: 'Partners', href: '/patners' },
     { name: 'Contact support', href: '/contactSupport' },
   ],
@@ -87,7 +86,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#131313] shadow-md' : 'bg-[#131313]/95 backdrop-blur-sm'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#131313] shadow-md' : 'bg-[#131313]/10 backdrop-blur-sm'
         }`}
     >
       <div className="max-w-8xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6 md:px-10">
