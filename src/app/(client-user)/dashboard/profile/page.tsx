@@ -271,7 +271,7 @@ const PortfolioDashboard = () => {
               <p className="text-2xl font-bold text-white">{formData.loanStatus}</p>
             </div>
             <div className="bg-black/30 backdrop-blur-sm rounded-2xl p-6 border border-amber-500/20">
-              <Shield className="w-8 h-8 text-amber-400 mb-3" />
+              <Shield className="w-8 h-8 mb-3 text-[#B4925B]" />
               <p className="text-sm text-gray-400 mb-1">Account Status</p>
               <p className="text-2xl font-bold text-green-400">{formData.accountStatus}</p>
             </div>
@@ -279,14 +279,14 @@ const PortfolioDashboard = () => {
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-[#B4925B] hover:text-[#8B7355]">
           {/* Personal Information */}
           <div className="bg-gradient-to-br from-gray-900/90 to-black/90 backdrop-blur-xl border border-amber-500/20 rounded-3xl p-8 shadow-2xl">
             <h3 className="text-2xl font-bold text-[#B4925B] hover:text-[#8B7355] mb-6 flex items-center gap-3">
               <User className="w-7 h-7" />
               Personal Information
             </h3>
-            <div className="space-y-4">
+            <div className="space-y-4 ">
               <InputField label="Full Name" icon={User} name="fullName" value={formData.fullName} />
               <InputField label="Email Address" icon={Mail} name="email" type="email" value={formData.email} />
               <InputField label="Phone Number" icon={Phone} name="phone" value={formData.phone} />
