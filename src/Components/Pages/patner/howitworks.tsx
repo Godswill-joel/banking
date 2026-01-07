@@ -32,7 +32,7 @@ export default function HowItWorks() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {steps.map((step) => (
             <div key={step.id} className="flex flex-col items-center text-center">
-              <img
+              <Image
                 src={step.icon}
                 alt={step.title}
                 className="h-10 w-10 mb-4"

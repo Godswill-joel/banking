@@ -1,3 +1,7 @@
+"use client";
+
+import Image from "next/image";
+
 export default function PartnerProgramSection() {
     return (
         <section className="relative w-full bg-gradient-to-br from-black to-[#111] text-white py-20 px-6">
@@ -12,7 +16,7 @@ export default function PartnerProgramSection() {
 
                 <div>
                     <div className="w-12 h-12 bg-[#2b2b2b] flex items-center justify-center rounded-lg mb-6">
-                        <img src="/assets/nav_people.svg" alt="group icon" />
+                        <Image src="/assets/nav_people.svg" alt="group icon" />
                     </div>
 
                     <h3 className="text-3xl font-semibold mb-4">Who is it for?</h3>
@@ -58,7 +62,7 @@ export default function PartnerProgramSection() {
 
                 <div className="flex justify-center lg:justify-end items-center">
                     <div className="w-[350px] h-[350px] md:w-[420px] md:h-[420px] rounded-full bg-[#151515] border border-[#222] flex items-center justify-center">
-                        <img
+                        <Image
                             src="/assets/Who-is-it-For.svg"
                             alt="Partner program illustration"
                             className="w-120 h-120 object-contain opacity-90"

@@ -8,14 +8,14 @@ import {
 } from 'lucide-react';
 
 
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+// const firebaseConfig = {
+//   apiKey: "YOUR_API_KEY",
+//   authDomain: "YOUR_AUTH_DOMAIN",
+//   projectId: "YOUR_PROJECT_ID",
+//   storageBucket: "YOUR_STORAGE_BUCKET",
+//   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+//   appId: "YOUR_APP_ID"
+// };
 
 const PortfolioDashboard = () => {
   
@@ -123,18 +123,18 @@ const PortfolioDashboard = () => {
 
 
   // Field configurations for mapping
-  const personalInfoFields = [
-    { label: 'Full Name', icon: User, name: 'fullName', type: 'text' },
-    { label: 'Email Address', icon: Mail, name: 'email', type: 'email' },
-    { label: 'Phone Number', icon: Phone, name: 'phone', type: 'text' },
-    { label: 'Date of Birth', icon: Calendar, name: 'dateOfBirth', type: 'date' },
-    { label: 'Nationality', icon: Globe, name: 'nationality', type: 'text' },
-    { label: 'Residential Address', icon: MapPin, name: 'address', type: 'text' }
-  ];
+  // const personalInfoFields = [
+  //   { label: 'Full Name', icon: User, name: 'fullName', type: 'text' },
+  //   { label: 'Email Address', icon: Mail, name: 'email', type: 'email' },
+  //   { label: 'Phone Number', icon: Phone, name: 'phone', type: 'text' },
+  //   { label: 'Date of Birth', icon: Calendar, name: 'dateOfBirth', type: 'date' },
+  //   { label: 'Nationality', icon: Globe, name: 'nationality', type: 'text' },
+  //   { label: 'Residential Address', icon: MapPin, name: 'address', type: 'text' }
+  // ];
 
-  const identityFields = [
-    { label: 'ID Number', icon: CreditCard, name: 'idNumber', type: 'text' }
-  ];
+  // const identityFields = [
+  //   { label: 'ID Number', icon: CreditCard, name: 'idNumber', type: 'text' }
+  // ];
   type InputFieldProps = {
     label: string;
     icon: React.ElementType;
@@ -318,7 +318,7 @@ const PortfolioDashboard = () => {
                 >
                   <option value="National ID">National ID</option>
                   <option value="Passport">Passport</option>
-                  <option value="Driver's License">Driver's License</option>
+                  <option value="Driver's License">Driver&apos;s License</option>
                 </select>
               </div>
               <InputField label="ID Number" icon={CreditCard} name="idNumber" value={formData.idNumber} />
