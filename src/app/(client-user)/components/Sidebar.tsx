@@ -21,15 +21,15 @@ import {
   History,
   Award,
   Bitcoin,
+  Menu,
+  X,
 } from "lucide-react";
-import { useSidebar } from "../contex/SidebarContex";
-import { usePathname, useRouter } from "next/navigation";
 
 export default function UserSidebar() {
-  const { isCollapsed, setIsCollapsed } = useSidebar();
-  const pathname = usePathname();
-  const router = useRouter();
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [pathname, setPathname] = useState("/dashboard");
 
   const mainMenuItems = [
     {
@@ -37,63 +37,72 @@ export default function UserSidebar() {
       label: "Dashboard",
       icon: Home,
       path: "/dashboard",
-      badge: null
+      badge: null,
+      showInBottomNav: true,
     },
     {
       id: "wallet",
-      label: "My Wallet",
+      label: "Wallet",
       icon: Wallet,
       path: "/dashboard/wallet",
-      badge: null
+      badge: null,
+      showInBottomNav: true,
     },
     {
       id: "send",
-      label: "Send Crypto",
+      label: "Send",
       icon: Send,
       path: "/dashboard/send",
-      badge: null
+      badge: null,
+      showInBottomNav: false,
     },
     {
       id: "receive",
       label: "Receive",
       icon: Download,
       path: "/dashboard/receive",
-      badge: null
+      badge: null,
+      showInBottomNav: false,
     },
     {
       id: "invest",
       label: "Invest",
       icon: TrendingUp,
       path: "/dashboard/invest",
-      badge: null
+      badge: null,
+      showInBottomNav: true,
     },
     {
       id: "loans",
       label: "Loans",
       icon: DollarSign,
       path: "/dashboard/loans",
-      badge: "2"
+      badge: "2",
+      showInBottomNav: false,
     },
     {
       id: "transactions",
-      label: "Transactions",
+      label: "History",
       icon: History,
       path: "/dashboard/transactions",
-      badge: null
+      badge: null,
+      showInBottomNav: false,
     },
     {
       id: "crypto-prices",
-      label: "Market Prices",
+      label: "Prices",
       icon: Bitcoin,
       path: "/dashboard/prices",
-      badge: null
-    },   
+      badge: null,
+      showInBottomNav: true,
+    },
     {
       id: "notifications",
-      label: "Notifications",
+      label: "Alerts",
       icon: Bell,
       path: "/dashboard/notifications",
-      badge: "5"
+      badge: "5",
+      showInBottomNav: false,
     },
   ];
 
@@ -102,19 +111,19 @@ export default function UserSidebar() {
       id: "profile",
       label: "Profile",
       icon: User,
-      path: "/dashboard/settings/profile"
+      path: "/dashboard/settings/profile",
     },
     {
       id: "security",
       label: "Security",
       icon: Lock,
-      path: "/dashboard/settings/security"
-    },    
+      path: "/dashboard/settings/security",
+    },
     {
       id: "help",
       label: "Help & Support",
       icon: HelpCircle,
-      path: "/dashboard/help"
+      path: "/dashboard/help",
     },
   ];
 
@@ -123,14 +132,24 @@ export default function UserSidebar() {
   };
 
   const confirmLogout = () => {
-    router.push("/login");
+    alert("Logged out successfully!");
+    setShowLogoutModal(false);
   };
+
+  const handleNavigation = (path: string) => {
+    setPathname(path);
+    setShowMobileMenu(false);
+  };
+
+  // Get bottom nav items (for mobile)
+  const bottomNavItems = mainMenuItems.filter((item) => item.showInBottomNav);
 
   return (
     <>
+      {/* Desktop Sidebar - Hidden on mobile */}
       <div
-        className={`bg-gradient-to-b from-black via-gray-900 to-black shadow-2xl transition-all duration-300 ${isCollapsed ? "w-20" : "w-72"
-          } h-screen fixed left-0 top-0 z-40 flex flex-col border-r border-[#B4925B]/20`}
+        className={`hidden lg:flex bg-gradient-to-b from-black via-gray-900 to-black shadow-2xl transition-all duration-300 ${isCollapsed ? "w-20" : "w-72"
+          } h-screen fixed left-0 top-0 z-40 flex-col border-r border-[#B4925B]/20`}
       >
         {/* Header */}
         <div className="p-4 border-b border-[#B4925B]/20 flex items-center justify-between backdrop-blur-xl bg-[#B4925B]/5">
@@ -172,16 +191,18 @@ export default function UserSidebar() {
                 return (
                   <li key={id} className="relative">
                     <button
-                      onClick={() => router.push(path)}
+                      onClick={() => handleNavigation(path)}
                       className={`w-full flex items-center justify-between p-3 rounded-xl transition-all group ${isActive
-                        ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
-                        : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
+                          ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
+                          : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
                         }`}
                     >
                       <div className="flex items-center space-x-3">
                         <Icon
                           size={20}
-                          className={isActive ? "text-black" : "text-gray-500 group-hover:text-[#B4925B]"}
+                          className={
+                            isActive ? "text-black" : "text-gray-500 group-hover:text-[#B4925B]"
+                          }
                         />
                         {!isCollapsed && <span className="font-medium">{label}</span>}
                       </div>
@@ -216,15 +237,17 @@ export default function UserSidebar() {
                 return (
                   <li key={id}>
                     <button
-                      onClick={() => router.push(path)}
+                      onClick={() => handleNavigation(path)}
                       className={`w-full flex items-center space-x-3 p-3 rounded-xl transition-all group ${isActive
-                        ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
-                        : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
+                          ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
+                          : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
                         }`}
                     >
                       <Icon
                         size={20}
-                        className={isActive ? "text-black" : "text-gray-500 group-hover:text-[#B4925B]"}
+                        className={
+                          isActive ? "text-black" : "text-gray-500 group-hover:text-[#B4925B]"
+                        }
                       />
                       {!isCollapsed && <span className="font-medium">{label}</span>}
                     </button>
@@ -247,18 +270,169 @@ export default function UserSidebar() {
         </div>
       </div>
 
+      {/* Mobile Top Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-black via-gray-900 to-black border-b border-[#B4925B]/20 backdrop-blur-xl">
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#B4925B] to-[#8B7355] flex items-center justify-center shadow-lg shadow-[#B4925B]/30">
+              <Bitcoin className="w-6 h-6 text-black" />
+            </div>
+            <div>
+              <span className="font-bold text-lg bg-gradient-to-r from-[#B4925B] to-white bg-clip-text text-transparent">
+                River
+              </span>
+              <p className="text-xs text-gray-400">Crypto Platform</p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="p-2 hover:bg-[#B4925B]/10 rounded-lg transition-all text-[#B4925B]"
+          >
+            {showMobileMenu ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Full Menu Overlay */}
+      {showMobileMenu && (
+        <div className="lg:hidden fixed inset-0 z-40 bg-black/95 backdrop-blur-xl pt-20">
+          <div className="h-full overflow-y-auto p-6 pb-32">
+            {/* Main Menu */}
+            <div className="mb-8">
+              <h3 className="text-xs font-semibold text-[#B4925B]/70 uppercase tracking-wider mb-4 px-2">
+                Main Menu
+              </h3>
+              <ul className="space-y-2">
+                {mainMenuItems.map(({ id, label, icon: Icon, path, badge }) => {
+                  const isActive = pathname === path;
+
+                  return (
+                    <li key={id}>
+                      <button
+                        onClick={() => handleNavigation(path)}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${isActive
+                            ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg"
+                            : "text-gray-300 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
+                          }`}
+                      >
+                        <div className="flex items-center space-x-4">
+                          <Icon size={22} />
+                          <span className="font-medium text-lg">{label}</span>
+                        </div>
+                        {badge && (
+                          <span className="bg-[#B4925B] text-black text-xs font-bold px-2.5 py-1 rounded-full">
+                            {badge}
+                          </span>
+                        )}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {/* Settings & Support */}
+            <div className="mb-8">
+              <h3 className="text-xs font-semibold text-[#B4925B]/70 uppercase tracking-wider mb-4 px-2">
+                Settings & Support
+              </h3>
+              <ul className="space-y-2">
+                {settingsMenuItems.map(({ id, label, icon: Icon, path }) => {
+                  const isActive = pathname === path;
+
+                  return (
+                    <li key={id}>
+                      <button
+                        onClick={() => handleNavigation(path)}
+                        className={`w-full flex items-center space-x-4 p-4 rounded-xl transition-all ${isActive
+                            ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg"
+                            : "text-gray-300 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
+                          }`}
+                      >
+                        <Icon size={22} />
+                        <span className="font-medium text-lg">{label}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            {/* Logout */}
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center space-x-4 p-4 rounded-xl text-red-400 hover:bg-red-500/10 transition-all"
+            >
+              <LogOut size={22} />
+              <span className="font-medium text-lg">Logout</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Bottom Navigation */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-t from-black via-gray-900 to-black border-t border-[#B4925B]/20 backdrop-blur-xl pb-safe">
+        <div className="flex items-center justify-around px-2 py-3">
+          {bottomNavItems.map(({ id, label, icon: Icon, path, badge }) => {
+            const isActive = pathname === path;
+
+            return (
+              <button
+                key={id}
+                onClick={() => handleNavigation(path)}
+                className="flex flex-col items-center justify-center flex-1 relative group"
+              >
+                <div
+                  className={`p-3 rounded-2xl transition-all ${isActive
+                      ? "bg-gradient-to-br from-[#B4925B] to-[#8B7355] shadow-lg shadow-[#B4925B]/30"
+                      : "hover:bg-[#B4925B]/10"
+                    }`}
+                >
+                  <Icon
+                    size={22}
+                    className={isActive ? "text-black" : "text-gray-400 group-hover:text-[#B4925B]"}
+                  />
+                  {badge && (
+                    <span className="absolute top-1 right-1 bg-[#B4925B] text-black text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-lg">
+                      {badge}
+                    </span>
+                  )}
+                </div>
+                <span
+                  className={`text-xs mt-1 font-medium transition-colors ${isActive ? "text-[#B4925B]" : "text-gray-500"
+                    }`}
+                >
+                  {label}
+                </span>
+              </button>
+            );
+          })}
+
+          {/* More Menu Button */}
+          <button
+            onClick={() => setShowMobileMenu(true)}
+            className="flex flex-col items-center justify-center flex-1"
+          >
+            <div className="p-3 rounded-2xl hover:bg-[#B4925B]/10 transition-all">
+              <Menu size={22} className="text-gray-400 group-hover:text-[#B4925B]" />
+            </div>
+            <span className="text-xs mt-1 font-medium text-gray-500">More</span>
+          </button>
+        </div>
+      </div>
+
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-          <div className="bg-gradient-to-br from-gray-900 to-black border border-[#B4925B]/30 rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 animate-slideUp">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-[#B4925B]/30 rounded-2xl shadow-2xl p-8 max-w-md w-full animate-slideUp">
             <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-[#B4925B]/20">
               <LogOut className="text-[#B4925B]" size={32} />
             </div>
-            <h2 className="text-2xl font-bold text-white text-center mb-2">
-              Confirm Logout
-            </h2>
+            <h2 className="text-2xl font-bold text-white text-center mb-2">Confirm Logout</h2>
             <p className="text-gray-400 text-center mb-6">
-              Are you sure you want to logout? You&apos;ll need to sign in again to access your account.
+              Are you sure you want to logout? You'll need to sign in again to access your
+              account.
             </p>
             <div className="flex gap-3">
               <button
@@ -292,7 +466,7 @@ export default function UserSidebar() {
         .animate-slideUp {
           animation: slideUp 0.3s ease-out;
         }
-        
+
         /* Custom Scrollbar */
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
@@ -307,6 +481,11 @@ export default function UserSidebar() {
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: rgba(180, 146, 91, 0.5);
+        }
+
+        /* Safe area padding for mobile devices with notches */
+        .pb-safe {
+          padding-bottom: env(safe-area-inset-bottom);
         }
       `}</style>
     </>
