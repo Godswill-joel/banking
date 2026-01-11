@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'
+import { useRouter } from 'next/navigation';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 type NavItem = {
@@ -57,6 +59,7 @@ const Dropdown = ({ items }: { items: NavItem[] }) => (
 );
 
 export default function Navbar() {
+  const router = useRouter()
   const [scrolled, setScrolled] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [mobileDropdown, setMobileDropdown] = useState<string | null>(null);
@@ -83,7 +86,7 @@ export default function Navbar() {
     const dropdownElement = dropdownRefs.current[hoveredDropdown || ''];
 
     if (dropdownElement && dropdownElement.contains(relatedTarget)) {
-      return; 
+      return;
     }
 
     setHoveredDropdown(null);
@@ -97,7 +100,7 @@ export default function Navbar() {
       <div className="max-w-8xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6 md:px-10">
         <Image src="/Logo/logo.svg" alt="Logo" width={150} height={40} priority />
 
-    
+
         <div className="hidden md:flex items-center space-x-1">
           {navItems.map(({ label, key, hasDropdown, href }) => (
             <div
@@ -131,9 +134,15 @@ export default function Navbar() {
 
 
         <div className="hidden md:flex items-center space-x-3">
-          <a className="px-4 py-2 text-base font-normal text-[#F9F9F9] hover:bg-gray-700/60 rounded-2xl transition-colors duration-200">
-            Log in
-          </a>
+          <Link
+            href={'user-login'}
+          >
+            <p
+              className="px-4 py-2 text-base font-normal text-[#F9F9F9] hover:bg-gray-700/60 rounded-2xl transition-colors duration-200"
+            >
+              Log in
+            </p>
+          </Link>
           <a className="px-4 py-2 text-base font-normal bg-[#C5A063] text-black hover:bg-[#b08a53] rounded-2xl transition-colors duration-200">
             Sign up
           </a>
@@ -196,7 +205,7 @@ export default function Navbar() {
             </p>
           </div>
 
-    
+
           <div className="pt-2 space-y-3">
             <a className="block text-center py-2 text-base font-normal border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors duration-200">
               Sign in
