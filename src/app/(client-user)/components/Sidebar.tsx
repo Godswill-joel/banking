@@ -87,14 +87,7 @@ export default function UserSidebar() {
       icon: Bitcoin,
       path: "/dashboard/prices",
       badge: null
-    },
-    {
-      id: "rewards",
-      label: "Rewards",
-      icon: Award,
-      path: "/dashboard/rewards",
-      badge: "3"
-    },
+    },   
     {
       id: "notifications",
       label: "Notifications",
@@ -116,25 +109,7 @@ export default function UserSidebar() {
       label: "Security",
       icon: Lock,
       path: "/dashboard/settings/security"
-    },
-    {
-      id: "preferences",
-      label: "Preferences",
-      icon: Settings,
-      path: "/dashboard/settings/preferences"
-    },
-    {
-      id: "payment-methods",
-      label: "Payment Methods",
-      icon: CreditCard,
-      path: "/dashboard/settings/payment-methods"
-    },
-    {
-      id: "activity",
-      label: "Activity Log",
-      icon: Activity,
-      path: "/dashboard/settings/activity"
-    },
+    },    
     {
       id: "help",
       label: "Help & Support",
@@ -148,7 +123,6 @@ export default function UserSidebar() {
   };
 
   const confirmLogout = () => {
-    // Add your logout logic here
     router.push("/login");
   };
 
@@ -200,8 +174,8 @@ export default function UserSidebar() {
                     <button
                       onClick={() => router.push(path)}
                       className={`w-full flex items-center justify-between p-3 rounded-xl transition-all group ${isActive
-                          ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
-                          : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
+                        ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
+                        : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
                         }`}
                     >
                       <div className="flex items-center space-x-3">
@@ -244,8 +218,8 @@ export default function UserSidebar() {
                     <button
                       onClick={() => router.push(path)}
                       className={`w-full flex items-center space-x-3 p-3 rounded-xl transition-all group ${isActive
-                          ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
-                          : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
+                        ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
+                        : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
                         }`}
                     >
                       <Icon
