@@ -39,22 +39,6 @@ interface Transaction {
     description: string;
 }
 
-interface UserData {
-    firstName: string;
-    lastName: string;
-    email: string;
-    balance: number;
-    bitcoinBalance?: number;
-    totalInvested?: number;
-    activeLoans?: number;
-    profileImage?: string | null;
-    username?: string;
-    phone?: string;
-    country?: string;
-    city?: string;
-    walletAddress?: string;
-}
-
 
 export default function RiverUserDashboard() {
     const { userData, loading, error } = useUserData();

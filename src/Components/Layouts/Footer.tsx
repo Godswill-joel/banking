@@ -97,8 +97,6 @@ export default function Footer() {
           ))}
         </div>
       </div>
-
-      {/* Bottom copyright band */}
       <div className="bg-[#070707]">
         <div className="max-w-[1200px] mx-auto px-6 md:px-12 lg:px-16 py-4 text-sm text-gray-500">
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3">

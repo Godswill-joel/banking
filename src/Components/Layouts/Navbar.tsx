@@ -11,31 +11,26 @@ type NavItem = {
   desc?: string;
 };
 
-type NavigationKeys = 'individuals' | 'learn' | 'about';
+type NavigationKeys = 'individuals' |  'about';
 
 type NavigationType = Record<NavigationKeys, NavItem[]>;
 
 const navigation: NavigationType = {
   individuals: [
-    { name: 'Buy & sell', href: '#', desc: 'Purchase bitcoin with low fees' },
-    { name: 'Bitcoin interest on Cash', href: '#', desc: 'Convert bitcoin to cash instantly' },
-    { name: 'Wallet & Custody', href: '#', desc: 'Earn yield on your bitcoin' },
+    { name: 'Buy & sell', href: '/buy-bitcoin', desc: 'Purchase bitcoin with low fees' },
+    { name: 'Bitcoin interest on Cash', href: '/bitcoin-interest', desc: 'Convert bitcoin to cash instantly' },
+    { name: ' Zero-Fee Recurring Buys', href: '/zero-fee', desc: 'Pay $0 in fees on recurring buys' },
+    { name: 'Wallet & Custody', href: '/wallet', desc: 'Earn yield on your bitcoin' },
     { name: 'Inheritance', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
     { name: 'River Rewards', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
   ],
-  learn: [
-    { name: 'Learn', href: '/privateriver' },
-    { name: 'Research', href: '#' },
-    { name: 'Support', href: '#' },
-    { name: 'Announcement', href: '#' },
-  ],
+
   about: [
     { name: 'Company', href: '/about' },
     { name: 'Security', href: '/securityPage' },
-    { name: 'Proof of reserves', href: '#' },
-    { name: 'Company financials', href: '#' },
-    { name: 'Partners', href: '#' },
-    { name: 'Contact support', href: '#' },
+    { name: 'Company financials', href: '/financials' },
+    { name: 'Partners', href: '/patners' },
+    { name: 'Contact support', href: '/contactSupport' },
   ],
 };
 
@@ -43,7 +38,6 @@ const navItems = [
   { label: 'Individuals', key: 'individuals', hasDropdown: true },
   { label: 'Private Clients', key: 'private', href: '/privateriver' },
   { label: 'Business', key: 'business', href: '#' },
-  { label: 'Learn', key: 'learn', hasDropdown: true },
   { label: 'About', key: 'about', hasDropdown: true },
 ];
 
@@ -91,10 +85,11 @@ export default function Navbar() {
 
     setHoveredDropdown(null);
   };
+  
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#131313] shadow-md' : 'bg-[#131313]/95 backdrop-blur-sm'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-[#131313] shadow-md' : 'bg-[#131313]/10 backdrop-blur-sm'
         }`}
     >
       <div className="max-w-8xl mx-auto flex h-20 items-center justify-between px-4 sm:px-6 md:px-10">
@@ -108,7 +103,9 @@ export default function Navbar() {
               className="relative"
               onMouseEnter={() => hasDropdown && handleMouseEnter(key)}
               onMouseLeave={handleMouseLeave}
-              ref={el => dropdownRefs.current[key] = el}
+              ref={(el) => {
+                dropdownRefs.current[key] = el;
+              }}              
             >
               <a
                 href={href || '#'}

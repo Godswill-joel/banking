@@ -102,29 +102,25 @@ export const footer = {
         { label: "Zero Fee DCA", href: "/dca" },
         { label: "River Link", href: "/link" },
         { label: "Bitcoin Price", href: "/price" },
-        { label: "Private Clients", href: "/private" },
+        { label: "Private Clients", href: "/privateriver" },
         { label: "Businesses", href: "/businesses" },
-        { label: "Learn", href: "/learn" },
       ] as FooterLink[],
     },
     {
       title: "Company",
       links: [
         { label: "About", href: "/about" },
-        { label: "Careers", href: "/careers" },
-        { label: "Areas of Availability", href: "/availability" },
         { label: "Announcements", href: "/announcements" },
-        { label: "Security", href: "/security" },
+        { label: "Security", href: "/securityPage" },
         { label: "Proof of Reserves", href: "/proof-of-reserves" },
-        { label: "Partner", href: "/partner" },
+        { label: "Partner", href: "/patners" },
       ] as FooterLink[],
     },
     {
       title: "Support",
       links: [
         { label: "Help Center", href: "/help" },
-        { label: "Contact Support", href: "/contact" },
-        { label: "Site Status", href: "/status" },
+        { label: "Contact Support", href: "/contactSupport" },
       ] as FooterLink[],
     },
     {
