@@ -250,7 +250,7 @@ const PortfolioDashboard = () => {
                   onClick={() => setSelectedCurrency(curr)}
                   className={`px-6 py-3 rounded-xl font-semibold transition-all duration-300 ${selectedCurrency === curr
                       ? 'bg-black text-[#B4925B] shadow-lg'
-                      : 'bg-amber-500/10 text-[#B4925B] hover:bg-amber-500/20'
+                      : 'bg-amber-500/10 text-black hover:bg-amber-500/20'
                     }`}
                 >
                   {curr}
@@ -312,7 +312,7 @@ const PortfolioDashboard = () => {
                   value={formData.idType}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`w-full bg-black/40 border ${isEditing ? 'border-amber-500/50' : 'border-amber-900/30'
+                  className={`w-full bg-black/40 text-[#B4925B] border ${isEditing ? 'border-amber-500/50' : 'border-amber-900/30'
                     } rounded-xl px-4 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all duration-300 ${!isEditing ? 'cursor-not-allowed opacity-70' : ''
                     }`}
                 >
@@ -321,7 +321,7 @@ const PortfolioDashboard = () => {
                   <option value="Driver's License">Driver&apos;s License</option>
                 </select>
               </div>
-              <InputField label="ID Number" icon={CreditCard} name="idNumber" value={formData.idNumber} />
+              <InputField label="ID Number"  icon={CreditCard} name="idNumber" value={formData.idNumber} />
               <div>
                 <label className="block text-xs font-medium text-[#B4925B]  hover:text-[#8B7355] mb-2 uppercase tracking-wide">
                   Verification Status
