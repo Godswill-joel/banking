@@ -210,22 +210,7 @@ export default function MarketPricePage() {
                 </p>
               </div>
             </div>
-
-            <div className="backdrop-blur-xl bg-black/40 border border-[#B4925B]/30 rounded-xl p-4 md:p-6 shadow-xl">
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-[#B4925B] font-mono tracking-wider mb-1">
-                  {currentTime.toLocaleTimeString("en-US", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
-                </div>
-                <div className="text-gray-400 text-xs flex items-center justify-center gap-1">
-                  <Clock size={12} />
-                  <span>Live Updates</span>
-                </div>
-              </div>
-            </div>
+          
           </div>
         </div>
 

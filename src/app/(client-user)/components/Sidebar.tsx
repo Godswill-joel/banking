@@ -1,36 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
-  DollarSign,
   ChevronLeft,
   ChevronRight,
   Home,
   Wallet,
-  Settings,
   Bell,
-  CreditCard,
   TrendingUp,
   LogOut,
   HelpCircle,
   User,
-  Lock,
-  Activity,
-  Send,
   Download,
-  History,
-  Award,
   Bitcoin,
   Menu,
   X,
 } from "lucide-react";
+import { useSidebar } from "../contex/SidebarContex"; 
 
 export default function UserSidebar() {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isCollapsed, setIsCollapsed } = useSidebar(); // Use context instead of local state
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [pathname, setPathname] = useState("/dashboard");
+  const router = useRouter();
 
+  
   const mainMenuItems = [
     {
       id: "dashboard",
@@ -47,18 +43,10 @@ export default function UserSidebar() {
       path: "/dashboard/wallet",
       badge: null,
       showInBottomNav: true,
-    },
-    {
-      id: "send",
-      label: "Send",
-      icon: Send,
-      path: "/dashboard/send",
-      badge: null,
-      showInBottomNav: false,
-    },
+    },    
     {
       id: "receive",
-      label: "Receive",
+      label: "Send/Receive",
       icon: Download,
       path: "/dashboard/receive",
       badge: null,
@@ -71,22 +59,6 @@ export default function UserSidebar() {
       path: "/dashboard/invest",
       badge: null,
       showInBottomNav: true,
-    },
-    {
-      id: "loans",
-      label: "Loans",
-      icon: DollarSign,
-      path: "/dashboard/loans",
-      badge: "2",
-      showInBottomNav: false,
-    },
-    {
-      id: "transactions",
-      label: "History",
-      icon: History,
-      path: "/dashboard/transactions",
-      badge: null,
-      showInBottomNav: false,
     },
     {
       id: "crypto-prices",
@@ -111,13 +83,7 @@ export default function UserSidebar() {
       id: "profile",
       label: "Profile",
       icon: User,
-      path: "/dashboard/settings/profile",
-    },
-    {
-      id: "security",
-      label: "Security",
-      icon: Lock,
-      path: "/dashboard/settings/security",
+      path: "/dashboard/profile",
     },
     {
       id: "help",
@@ -136,9 +102,9 @@ export default function UserSidebar() {
     setShowLogoutModal(false);
   };
 
-  const handleNavigation = (path: string) => {
-    setPathname(path);
-    setShowMobileMenu(false);
+  // Toggle function
+  const toggleSidebar = () => {
+    setIsCollapsed(!isCollapsed);
   };
 
   // Get bottom nav items (for mobile)
@@ -148,8 +114,9 @@ export default function UserSidebar() {
     <>
       {/* Desktop Sidebar - Hidden on mobile */}
       <div
-        className={`hidden lg:flex bg-gradient-to-b from-black via-gray-900 to-black shadow-2xl transition-all duration-300 ${isCollapsed ? "w-20" : "w-72"
-          } h-screen fixed left-0 top-0 z-40 flex-col border-r border-[#B4925B]/20`}
+        className={`hidden lg:flex bg-gradient-to-b from-black via-gray-900 to-black shadow-2xl transition-all duration-300 ${
+          isCollapsed ? "w-20" : "w-72"
+        } h-screen fixed left-0 top-0 z-40 flex-col border-r border-[#B4925B]/20`}
       >
         {/* Header */}
         <div className="p-4 border-b border-[#B4925B]/20 flex items-center justify-between backdrop-blur-xl bg-[#B4925B]/5">
@@ -168,7 +135,7 @@ export default function UserSidebar() {
           )}
 
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={toggleSidebar} // Use the toggle function
             className="p-2 hover:bg-[#B4925B]/10 rounded-lg transition-all text-[#B4925B]"
           >
             {isCollapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
@@ -191,11 +158,12 @@ export default function UserSidebar() {
                 return (
                   <li key={id} className="relative">
                     <button
-                      onClick={() => handleNavigation(path)}
-                      className={`w-full flex items-center justify-between p-3 rounded-xl transition-all group ${isActive
+                      onClick={() => router.push(path)}
+                      className={`w-full flex items-center justify-between p-3 rounded-xl transition-all group ${
+                        isActive
                           ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
                           : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
-                        }`}
+                      }`}
                     >
                       <div className="flex items-center space-x-3">
                         <Icon
@@ -237,11 +205,12 @@ export default function UserSidebar() {
                 return (
                   <li key={id}>
                     <button
-                      onClick={() => handleNavigation(path)}
-                      className={`w-full flex items-center space-x-3 p-3 rounded-xl transition-all group ${isActive
+                      onClick={() => router.push(path)}
+                      className={`w-full flex items-center space-x-3 p-3 rounded-xl transition-all group ${
+                        isActive
                           ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg shadow-[#B4925B]/30"
                           : "text-gray-400 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
-                        }`}
+                      }`}
                     >
                       <Icon
                         size={20}
@@ -310,11 +279,15 @@ export default function UserSidebar() {
                   return (
                     <li key={id}>
                       <button
-                        onClick={() => handleNavigation(path)}
-                        className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${isActive
+                        onClick={() => {
+                          router.push(path);
+                          setShowMobileMenu(false); // Close mobile menu after navigation
+                        }}
+                        className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${
+                          isActive
                             ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg"
                             : "text-gray-300 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
-                          }`}
+                        }`}
                       >
                         <div className="flex items-center space-x-4">
                           <Icon size={22} />
@@ -344,11 +317,15 @@ export default function UserSidebar() {
                   return (
                     <li key={id}>
                       <button
-                        onClick={() => handleNavigation(path)}
-                        className={`w-full flex items-center space-x-4 p-4 rounded-xl transition-all ${isActive
+                        onClick={() => {
+                          router.push(path);
+                          setShowMobileMenu(false); // Close mobile menu after navigation
+                        }}
+                        className={`w-full flex items-center space-x-4 p-4 rounded-xl transition-all ${
+                          isActive
                             ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black shadow-lg"
                             : "text-gray-300 hover:bg-[#B4925B]/10 hover:text-[#B4925B]"
-                          }`}
+                        }`}
                       >
                         <Icon size={22} />
                         <span className="font-medium text-lg">{label}</span>
@@ -361,7 +338,10 @@ export default function UserSidebar() {
 
             {/* Logout */}
             <button
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                setShowMobileMenu(false);
+              }}
               className="w-full flex items-center space-x-4 p-4 rounded-xl text-red-400 hover:bg-red-500/10 transition-all"
             >
               <LogOut size={22} />
@@ -380,14 +360,15 @@ export default function UserSidebar() {
             return (
               <button
                 key={id}
-                onClick={() => handleNavigation(path)}
+                onClick={() => router.push(path)}
                 className="flex flex-col items-center justify-center flex-1 relative group"
               >
                 <div
-                  className={`p-3 rounded-2xl transition-all ${isActive
+                  className={`p-3 rounded-2xl transition-all ${
+                    isActive
                       ? "bg-gradient-to-br from-[#B4925B] to-[#8B7355] shadow-lg shadow-[#B4925B]/30"
                       : "hover:bg-[#B4925B]/10"
-                    }`}
+                  }`}
                 >
                   <Icon
                     size={22}
@@ -400,8 +381,9 @@ export default function UserSidebar() {
                   )}
                 </div>
                 <span
-                  className={`text-xs mt-1 font-medium transition-colors ${isActive ? "text-[#B4925B]" : "text-gray-500"
-                    }`}
+                  className={`text-xs mt-1 font-medium transition-colors ${
+                    isActive ? "text-[#B4925B]" : "text-gray-500"
+                  }`}
                 >
                   {label}
                 </span>
@@ -431,7 +413,7 @@ export default function UserSidebar() {
             </div>
             <h2 className="text-2xl font-bold text-white text-center mb-2">Confirm Logout</h2>
             <p className="text-gray-400 text-center mb-6">
-              Are you sure you want to logout? You'll need to sign in again to access your
+              Are you sure you want to logout? You&apos;ll need to sign in again to access your
               account.
             </p>
             <div className="flex gap-3">
@@ -450,44 +432,7 @@ export default function UserSidebar() {
             </div>
           </div>
         </div>
-      )}
-
-      <style jsx>{`
-        @keyframes slideUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-slideUp {
-          animation: slideUp 0.3s ease-out;
-        }
-
-        /* Custom Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: rgba(180, 146, 91, 0.1);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: rgba(180, 146, 91, 0.3);
-          border-radius: 10px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: rgba(180, 146, 91, 0.5);
-        }
-
-        /* Safe area padding for mobile devices with notches */
-        .pb-safe {
-          padding-bottom: env(safe-area-inset-bottom);
-        }
-      `}</style>
+      )}    
     </>
   );
 }

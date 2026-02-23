@@ -6,15 +6,21 @@ import { onAuthStateChanged, User } from "firebase/auth";
 export interface UserData {
   firstName: string;
   lastName: string;
+  fullName?: string;
   email: string;
-  balance?: number;         
-  bitcoinBalance?: number; 
+  emailVerified?: boolean;
+  phoneVerified?: boolean;
+  address?: string;
+  balance?: number;
+  bitcoinBalance?: number;
   totalInvested?: number;
   activeLoans?: number;
   profileImage?: string | null;
+  zipCode?: string;
   username?: string;
   phone?: string;
   country?: string;
+  dateOfBirth?: string;
   city?: string;
   walletAddress?: string;
   kycVerified?: boolean;
@@ -27,18 +33,15 @@ export function useUserData() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Listen to auth state
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
 
       if (!currentUser) {
         setUserData(null);
         setLoading(false);
-        setError(null);
         return;
       }
 
-      // Listen to user's document in real time
       const userRef = doc(db, "users", currentUser.uid);
 
       const unsubscribeDoc = onSnapshot(
@@ -50,9 +53,15 @@ export function useUserData() {
             setUserData({
               firstName: data.firstName || "",
               lastName: data.lastName || "",
+              fullName: `${data.firstName || ""} ${data.lastName || ""}`,
               email: data.email || currentUser.email || "",
-              balance: data.balance || 0,
-              bitcoinBalance: data.bitcoinBalance ?? 0,
+              emailVerified: data.emailVerified ?? false,
+              phoneVerified: data.phoneVerified ?? false,
+              address: data.address || "",
+              zipCode: data.zipCode || "",
+              dateOfBirth: data.dateOfBirth || "",
+              balance: Number(data.balance) || 0,
+              bitcoinBalance: Number(data.bitcoinBalance) || 0,
               totalInvested: data.totalInvested ?? 0,
               activeLoans: data.activeLoans ?? 0,
               profileImage: data.profileImage || null,
@@ -61,27 +70,25 @@ export function useUserData() {
               country: data.country || "",
               city: data.city || "",
               walletAddress: data.walletAddress || "",
-              kycVerified: data.kycVerified || false,
+              kycVerified: data.kycVerified ?? false,
             });
 
             setError(null);
           } else {
-            setError("User profile not found in database.");
+            setError("User profile not found.");
           }
+
           setLoading(false);
         },
-        (err) => {
-          console.error("Firestore error:", err);
+        () => {
           setError("Failed to load user data.");
           setLoading(false);
         }
       );
 
-      // Cleanup document listener when auth user changes
       return () => unsubscribeDoc();
     });
 
-    // Cleanup auth listener on unmount
     return () => unsubscribeAuth();
   }, []);
 

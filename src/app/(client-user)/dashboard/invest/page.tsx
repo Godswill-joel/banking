@@ -3,19 +3,15 @@
 import React, { useState } from "react";
 import {
     TrendingUp,
-    Bitcoin,
     Shield,
     CheckCircle,
-    ArrowRight,
-    Calculator,
     Award,
 } from "lucide-react";
 
 
 export default function InvestPage() {
     const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-    const [investAmount, setInvestAmount] = useState("");
-    const [showInvestModal, setShowInvestModal] = useState(false);
+
 
     const investmentPlans = [
         {
@@ -72,36 +68,6 @@ export default function InvestPage() {
         },
     ];
 
-    const cryptoAssets = [
-        {
-            id: "btc",
-            name: "Bitcoin",
-            symbol: "BTC",
-            currentPrice: 43750.25,
-            expectedReturn: 15,
-            duration: "6 months",
-            minInvest: 0.001,
-            icon: Bitcoin,
-        },
-        {
-            id: "eth",
-            name: "Ethereum",
-            symbol: "ETH",
-            currentPrice: 2340.80,
-            expectedReturn: 18,
-            duration: "6 months",
-            minInvest: 0.01,
-            icon: TrendingUp,
-        },
-    ];
-
-    const selectedPlanData = investmentPlans.find(p => p.id === selectedPlan);
-    const estimatedReturn = investAmount ? (parseFloat(investAmount) * (selectedPlanData?.roi || 0)) / 100 : 0;
-
-    const handleInvest = () => {
-        if (!selectedPlan || !investAmount) return;
-        setShowInvestModal(true);
-    };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-6 lg:p-8">
@@ -175,126 +141,8 @@ export default function InvestPage() {
                             )}
                         </div>
                     ))}
-                </div>
-
-                {/* Crypto Assets */}
-                <div className="backdrop-blur-xl bg-black/60 border border-[#B4925B]/20 rounded-2xl shadow-lg p-6">
-                    <h2 className="text-2xl font-bold text-white mb-4">Invest in Crypto Assets</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {cryptoAssets.map((crypto) => (
-                            <div
-                                key={crypto.id}
-                                className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-[#B4925B]/50 transition-all"
-                            >
-                                <div className="flex items-start justify-between mb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#B4925B] to-[#8B7355] flex items-center justify-center">
-                                            <crypto.icon className="text-black" size={24} />
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-white">{crypto.name}</h3>
-                                            <p className="text-sm text-gray-400">{crypto.symbol}</p>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-lg font-bold text-white">${crypto.currentPrice.toLocaleString()}</p>
-                                        <p className="text-sm text-green-500">+{crypto.expectedReturn}%</p>
-                                    </div>
-                                </div>
-                                <div className="flex justify-between text-sm mb-4">
-                                    <span className="text-gray-400">Min. Investment</span>
-                                    <span className="text-white">{crypto.minInvest} {crypto.symbol}</span>
-                                </div>
-                                <button className="w-full py-3 bg-[#B4925B]/20 hover:bg-[#B4925B]/30 border border-[#B4925B]/30 text-[#B4925B] rounded-lg font-semibold transition-all">
-                                    Invest Now
-                                </button>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Investment Form */}
-                {selectedPlan && (
-                    <div className="backdrop-blur-xl bg-black/60 border border-[#B4925B]/20 rounded-2xl shadow-lg p-6 md:p-8">
-                        <h2 className="text-2xl font-bold text-white mb-6">Investment Details</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label className="block text-sm font-semibold text-white mb-2">
-                                    Investment Amount (USD)
-                                </label>
-                                <input
-                                    type="number"
-                                    value={investAmount}
-                                    onChange={(e) => setInvestAmount(e.target.value)}
-                                    placeholder={`Min: $${selectedPlanData?.minInvestment}`}
-                                    className="w-full px-4 py-4 bg-white/5 border-2 border-white/10 rounded-xl text-white text-xl font-bold placeholder-gray-500 focus:outline-none focus:border-[#B4925B] transition-all"
-                                />
-                            </div>
-
-                            <div className="bg-[#B4925B]/10 border border-[#B4925B]/30 rounded-xl p-4">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <Calculator className="text-[#B4925B]" size={20} />
-                                    <h3 className="font-bold text-white">Estimated Returns</h3>
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between">
-                                        <span className="text-sm text-gray-400">Monthly Return</span>
-                                        <span className="text-lg font-bold text-[#B4925B]">
-                                            ${estimatedReturn.toFixed(2)}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-sm text-gray-400">Total After {selectedPlanData?.duration}</span>
-                                        <span className="text-lg font-bold text-white">
-                                            ${(parseFloat(investAmount || "0") + estimatedReturn).toFixed(2)}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button
-                            onClick={handleInvest}
-                            disabled={!investAmount || parseFloat(investAmount) < (selectedPlanData?.minInvestment || 0)}
-                            className="w-full mt-6 py-4 bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black rounded-xl font-bold text-lg hover:shadow-xl hover:shadow-[#B4925B]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                        >
-                            Start Investing
-                            <ArrowRight size={20} />
-                        </button>
-                    </div>
-                )}
-
-                {/* Success Modal */}
-                {showInvestModal && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                        <div className="bg-gradient-to-br from-gray-900 to-black border border-[#B4925B]/30 rounded-2xl shadow-2xl max-w-md w-full p-8 animate-slideUp">
-                            <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20">
-                                <CheckCircle className="text-green-500" size={48} />
-                            </div>
-                            <h2 className="text-2xl font-bold text-white text-center mb-2">
-                                Investment Successful!
-                            </h2>
-                            <p className="text-gray-400 text-center mb-6">
-                                Your investment is now active and earning returns
-                            </p>
-                            <button
-                                onClick={() => setShowInvestModal(false)}
-                                className="w-full px-6 py-3 bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black rounded-xl font-semibold hover:shadow-xl transition-all"
-                            >
-                                View Portfolio
-                            </button>
-                        </div>
-                    </div>
-                )}
+                </div>           
             </div>
-
-            <style jsx>{`
-        @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-slideUp { animation: slideUp 0.3s ease-out; }
-      `}</style>
         </div>
     );
 }
