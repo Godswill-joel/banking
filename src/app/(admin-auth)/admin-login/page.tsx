@@ -129,7 +129,7 @@ export default function GlassLoginPage() {
                     {/* Login Form */}
                     <div className="backdrop-blur-2xl bg-white/10 border border-white/20 rounded-3xl p-8 shadow-2xl">
                         <h1 className="text-3xl font-bold text-white text-center mb-2 animate-fade-in">
-                            Welcome Back
+                           Admin Login
                         </h1>
                         <p className="text-white/60 text-center mb-8 animate-fade-in animation-delay-200">
                             Sign in to continue

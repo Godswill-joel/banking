@@ -16,6 +16,7 @@ import {
   Bitcoin,
   Menu,
   X,
+  MessageCircle,
 } from "lucide-react";
 import { useSidebar } from "../contex/SidebarContex"; 
 
@@ -81,6 +82,14 @@ export default function UserSidebar() {
       label: "Alerts",
       icon: Bell,
       path: "/dashboard/notifications",
+      badge: "5",
+      showInBottomNav: false,
+    },
+    {
+      id: "chats",
+      label: "Chats",
+      icon: MessageCircle,
+      path: "/dashboard/chat",
       badge: "5",
       showInBottomNav: false,
     },
