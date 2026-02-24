@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -7,11 +8,9 @@ import {
   AlertCircle,
   CheckCircle,
   DollarSign,
-  Shield,
-  X,
+  Shield, 
   Filter,
   Search,
-  Archive,
   Trash2,
   Clock,
   ArrowUpRight,

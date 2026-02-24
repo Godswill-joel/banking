@@ -21,8 +21,8 @@ const navigation: NavigationType = {
     { name: 'Bitcoin interest on Cash', href: '/bitcoin-interest', desc: 'Convert bitcoin to cash instantly' },
     { name: ' Zero-Fee Recurring Buys', href: '/zero-fee', desc: 'Pay $0 in fees on recurring buys' },
     { name: 'Wallet & Custody', href: '/wallet', desc: 'Earn yield on your bitcoin' },
-    { name: 'Inheritance', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
-    { name: 'River Rewards', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
+    // { name: 'Inheritance', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
+    // { name: 'River Rewards', href: '#', desc: 'Tax-advantaged bitcoin retirement' },
   ],
 
   about: [
@@ -37,7 +37,7 @@ const navigation: NavigationType = {
 const navItems = [
   { label: 'Individuals', key: 'individuals', hasDropdown: true },
   { label: 'Private Clients', key: 'private', href: '/privateriver' },
-  { label: 'Business', key: 'business', href: '#' },
+  { label: 'Business', key: 'business', href: '/business' },
   { label: 'About', key: 'about', hasDropdown: true },
 ];
 

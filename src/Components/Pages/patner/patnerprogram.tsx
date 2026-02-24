@@ -16,7 +16,11 @@ export default function PartnerProgramSection() {
 
                 <div>
                     <div className="w-12 h-12 bg-[#2b2b2b] flex items-center justify-center rounded-lg mb-6">
-                        <Image src="/assets/nav_people.svg" alt="group icon" />
+                        <Image
+                            width={500}
+                            height={500}
+                            src="/assets/nav_people.svg"
+                            alt="group icon" />
                     </div>
 
                     <h3 className="text-3xl font-semibold mb-4">Who is it for?</h3>
@@ -63,6 +67,8 @@ export default function PartnerProgramSection() {
                 <div className="flex justify-center lg:justify-end items-center">
                     <div className="w-[350px] h-[350px] md:w-[420px] md:h-[420px] rounded-full bg-[#151515] border border-[#222] flex items-center justify-center">
                         <Image
+                            width={500}
+                            height={500}
                             src="/assets/Who-is-it-For.svg"
                             alt="Partner program illustration"
                             className="w-120 h-120 object-contain opacity-90"

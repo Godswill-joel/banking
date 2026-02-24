@@ -7,7 +7,7 @@ const steps = [
     id: 1,
     title: "Partner with River",
     description: "Apply and set up your partner agreement.",
-    icon: "/assets/handshake.svg", 
+    icon: "/assets/handshake.svg",
   },
   {
     id: 2,
@@ -33,6 +33,8 @@ export default function HowItWorks() {
           {steps.map((step) => (
             <div key={step.id} className="flex flex-col items-center text-center">
               <Image
+                width={500}
+                height={500}
                 src={step.icon}
                 alt={step.title}
                 className="h-10 w-10 mb-4"
@@ -46,13 +48,13 @@ export default function HowItWorks() {
         </div>
         <div className="mt-20 flex justify-center">
           <div className="w-full max-w-5xl h-72 bg-[#1A1A1A] rounded-2xl flex items-center justify-center border border-[#2A2A2A]">
-           <Image
-                src="/assets/How-it-works.svg"
-                alt="How it works"
-                width={600}
-                height={200}
-                className="object-contain"
-              />
+            <Image
+              src="/assets/How-it-works.svg"
+              alt="How it works"
+              width={600}
+              height={200}
+              className="object-contain"
+            />
           </div>
         </div>
       </div>

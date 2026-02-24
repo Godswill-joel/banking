@@ -4,14 +4,12 @@ import { db } from "@/firebase/config";
 import {
   collection,
   query,
-  where,
   orderBy,
   onSnapshot,
   addDoc,
   updateDoc,
   doc,
   serverTimestamp,
-  getDoc,
   setDoc,
   increment,
 } from "firebase/firestore";

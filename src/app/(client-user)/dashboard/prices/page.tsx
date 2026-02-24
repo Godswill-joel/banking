@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -8,13 +9,11 @@ import {
   DollarSign,
   ArrowUpRight,
   ArrowDownRight,
-  Clock,
   Activity,
   BarChart3,
   Zap,
   Star,
   Search,
-  Filter,
 } from "lucide-react";
 
 interface Asset {

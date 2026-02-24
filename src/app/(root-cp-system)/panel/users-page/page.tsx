@@ -21,7 +21,6 @@ import Link from 'next/link';
 export default function UsersPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("all");
-    const [viewMode, setViewMode] = useState<"grid" | "table">("table");
     const [users, setUsers] = useState<any[]>([]);
 
 
@@ -349,22 +348,6 @@ export default function UsersPage() {
                     </div>
                 </div>
             </div>
-
-            <style jsx>{`
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-slideDown {
-          animation: slideDown 0.3s ease-out;
-        }
-      `}</style>
         </div>
     );
 }

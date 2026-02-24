@@ -30,6 +30,8 @@ export default function HeroPartnerSection() {
           </div>
           <div className="flex justify-center lg:justify-end">
             <Image
+              width={500}
+              height={500}
               src="/assets/partner-hero-.webp"
               alt="Partner img"
               className="w-[260px] sm:w-[320px] md:w-[420px] lg:w-[600px] xl:w-[650px] object-contain mx-auto lg:mx-0"

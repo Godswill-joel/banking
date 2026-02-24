@@ -182,7 +182,7 @@ export default function InvestPlanPage() {
         if (plan && !payoutFrequency) {
             setPayoutFrequency(plan.payoutOptions[0]);
         }
-    }, [plan]);
+    }, [plan, payoutFrequency]);
 
     if (!plan || userLoading) {
         return (

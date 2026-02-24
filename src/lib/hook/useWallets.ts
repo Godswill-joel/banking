@@ -1,6 +1,6 @@
 // lib/hooks/useWallets.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { doc, updateDoc, addDoc, collection, runTransaction } from 'firebase/firestore';
+import { doc, collection, runTransaction } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 export const useFundWallet = () => {

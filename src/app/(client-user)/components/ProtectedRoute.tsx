@@ -31,7 +31,7 @@ export const BitcoinLoadingScreen = () => {
             setLoadingText((prev) => (prev + 1) % messages.length);
         }, 2000);
         return () => clearInterval(interval);
-    }, []);
+    }, [messages.length]);
 
     return (
         <div className="relative flex justify-center items-center h-screen w-screen overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
@@ -148,71 +148,6 @@ export const BitcoinLoadingScreen = () => {
                     </svg>
                 </div>
             </div>
-
-            <style jsx>{`
-                @keyframes grid-flow {
-                    0% { transform: translate(0, 0); }
-                    100% { transform: translate(60px, 60px); }
-                }
-                @keyframes float-particle {
-                    0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-                    10% { opacity: 0.3; }
-                    90% { opacity: 0.3; }
-                    100% { transform: translate(100px, -100vh) rotate(360deg); opacity: 0; }
-                }
-                @keyframes pulse-slow {
-                    0%, 100% { opacity: 0.3; transform: scale(1); }
-                    50% { opacity: 0.5; transform: scale(1.1); }
-                }
-                @keyframes spin-slow {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                @keyframes ping-slow {
-                    0% { transform: scale(1); opacity: 0.5; }
-                    50% { transform: scale(1.5); opacity: 0; }
-                    100% { transform: scale(1); opacity: 0; }
-                }
-                @keyframes float-vertical {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-20px); }
-                }
-                @keyframes loading-bar {
-                    0% { background-position: 200% 0; }
-                    100% { background-position: -200% 0; }
-                }
-                @keyframes pulse-text {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.7; }
-                }
-                @keyframes fade-slide {
-                    0% { opacity: 0; transform: translateY(10px); }
-                    10% { opacity: 1; transform: translateY(0); }
-                    90% { opacity: 1; transform: translateY(0); }
-                    100% { opacity: 0; transform: translateY(-10px); }
-                }
-                @keyframes bounce-sequence {
-                    0%, 80%, 100% { transform: scale(0); opacity: 0.5; }
-                    40% { transform: scale(1); opacity: 1; }
-                }
-                @keyframes dash-draw {
-                    0% { stroke-dashoffset: 100; }
-                    100% { stroke-dashoffset: 0; }
-                }
-
-                .animate-grid-flow { animation: grid-flow 15s linear infinite; }
-                .animate-float-particle { animation: float-particle linear infinite; }
-                .animate-pulse-slow { animation: pulse-slow 4s ease-in-out infinite; }
-                .animation-delay-2s { animation-delay: 2s; }
-                .animate-spin-slow { animation: spin-slow 8s linear infinite; }
-                .animate-ping-slow { animation: ping-slow 2s ease-out infinite; }
-                .animate-float-vertical { animation: float-vertical 3s ease-in-out infinite; }
-                .animate-loading-bar { animation: loading-bar 2s linear infinite; }
-                .animate-pulse-text { animation: pulse-text 2s ease-in-out infinite; }
-                .animate-fade-slide { animation: fade-slide 2s ease-in-out; }
-                .animate-bounce-sequence { animation: bounce-sequence 1.5s ease-in-out infinite; }
-                .animate-dash-draw { animation: dash-draw 3s linear infinite; }
-            `}</style>
         </div>
     );
 };

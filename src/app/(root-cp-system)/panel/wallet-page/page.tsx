@@ -4,10 +4,8 @@
 import React, { useState } from "react";
 import {
   Search,
-  Filter,
   Plus,
   Minus,
-  Download,
   CreditCard,
 } from "lucide-react";
 

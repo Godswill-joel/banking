@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,15 +12,12 @@ import {
     CreditCard,
     Shield,
     Clock,
-    Lock,
     Wallet,
     CheckCircle,
     XCircle,
     Edit,
     ArrowLeft,
-    TrendingUp,
     Send,
-    Download,
     Ban,
     AlertTriangle,
     Activity,
@@ -28,7 +26,7 @@ import {
     Plus,
     X,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";/////
 import { useParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/firebase/config";
@@ -38,7 +36,7 @@ import { createTransaction, fetchTransactions } from "@/firebase/firebaseTransac
 
 export default function UserProfileView() {
     const params = useParams();
-    const router = useRouter()
+    // const router = useRouter()
     const userId = params.id;
     const [userData, setUserData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -101,7 +99,7 @@ export default function UserProfileView() {
         return <div className="text-center py-20 text-red-600">User not found</div>;
     }
 
-  
+
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'completed': return 'bg-green-500';
@@ -419,7 +417,7 @@ export default function UserProfileView() {
                                                     </p>
 
                                                 </div>
-                                            </div>                                          
+                                            </div>
 
                                         </div>
                                     </div>
@@ -858,22 +856,6 @@ export default function UserProfileView() {
                     </div>
                 )}
             </div>
-
-            <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.4s ease-out;
-        }
-      `}</style>
         </div>
     );
 }

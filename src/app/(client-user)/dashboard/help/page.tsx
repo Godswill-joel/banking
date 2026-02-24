@@ -151,7 +151,7 @@ export default function HelpSupportPage() {
                 Help & Support
               </h1>
               <p className="text-gray-400 text-sm md:text-base">
-                We're here to help you 24/7
+                We&apos;re here to help you 24/7
               </p>
             </div>
           </div>
@@ -303,7 +303,7 @@ export default function HelpSupportPage() {
               </h2>
             </div>
             <p className="text-gray-400 mt-2">
-              Can't find what you're looking for? Send us a message and we'll get
+              Can&apos;t find what you&apos;re looking for? Send us a message and we&apos;ll get
               back to you within 24 hours.
             </p>
           </div>

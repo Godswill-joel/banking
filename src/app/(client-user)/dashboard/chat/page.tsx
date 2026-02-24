@@ -122,7 +122,7 @@ export default function UserChatPage() {
         setTimeout(() => scrollToBottom(false), 60);
       }
     );
-  }, [chatId]);
+  }, [chatId, uid]);
 
   // mark read
   useEffect(() => {
@@ -131,7 +131,7 @@ export default function UserChatPage() {
     if (!unreadMsgs.length) return;
     unreadMsgs.forEach((m) => updateDoc(doc(db, "chats", chatId, "messages", m.id), { read: true }));
     updateDoc(doc(db, "chats", chatId), { unreadAdmin: 0 });
-  }, [messages]);
+  }, [messages, chatId, uid]);
 
   // admin online
   useEffect(() => onSnapshot(doc(db, "status", "admin"), (snap) => {

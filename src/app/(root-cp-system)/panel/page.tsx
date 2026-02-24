@@ -19,7 +19,7 @@ import {
 import { BitcoinLoadingScreen } from '../components/ProtectedRoute'
 import { auth, db } from "@/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, query, where, getDocs, getCountFromServer, orderBy, limit } from "firebase/firestore";
+import { collection, query, where, getDocs, getCountFromServer } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
 interface UserData {
@@ -184,7 +184,7 @@ export default function DashboardPage() {
                     requestChange,
                 }));
             } catch (error) {
-                console.log("Transactions collection not available, using defaults");
+                console.log("Transactions collection not available, using defaults", error);
             }
 
         } catch (error) {
@@ -443,21 +443,7 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <style jsx>{`
-        @keyframes pulse-subtle {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.9;
-          }
-        }
-        .animate-pulse-subtle {
-          animation: pulse-subtle 2s ease-in-out infinite;
-        }
-      `}</style>
+            </div>   
         </div>
     );
 }

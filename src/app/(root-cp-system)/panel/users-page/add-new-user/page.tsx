@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState } from "react";
@@ -545,7 +546,7 @@ export default function AddUserPage() {
                                             </div>
                                             <div>
                                                 <h3 className="font-semibold text-black">Email Verification</h3>
-                                                <p className="text-sm text-gray-500">Verify user's email address</p>
+                                                <p className="text-sm text-gray-500">Verify user&apos;s email address</p>
                                             </div>
                                         </div>
                                         <label className="relative inline-flex items-center cursor-pointer">
@@ -567,7 +568,7 @@ export default function AddUserPage() {
                                             </div>
                                             <div>
                                                 <h3 className="font-semibold text-black">Phone Verification</h3>
-                                                <p className="text-sm text-gray-500">Verify user's phone number</p>
+                                                <p className="text-sm text-gray-500">Verify user&apos;s phone number</p>
                                             </div>
                                         </div>
                                         <label className="relative inline-flex items-center cursor-pointer">
@@ -670,23 +671,7 @@ export default function AddUserPage() {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.4s ease-out;
-        }
-      `}</style>
+            </div>   
         </div>
     );
 }

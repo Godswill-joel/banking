@@ -107,11 +107,10 @@ const PortfolioDashboard = () => {
             <Icon className="w-4 h-4 text-[#B4925B]/50" />
             <span className="text-xs text-zinc-500 uppercase tracking-wider">{label}</span>
           </div>
-          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
-            Boolean(value)
+          <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${Boolean(value)
               ? "bg-emerald-500/10 text-emerald-400"
               : "bg-zinc-800 text-zinc-500"
-          }`}>
+            }`}>
             {Boolean(value) ? "Verified" : "Unverified"}
           </span>
         </div>
@@ -128,7 +127,11 @@ const PortfolioDashboard = () => {
           <input
             type={type}
             name={name}
-            value={value ?? ""}
+            value={
+              typeof value === "boolean"
+                ? String(value)
+                : value ?? ""
+            }
             onChange={handleInputChange}
             disabled={!isActive}
             className={`w-full bg-white/[0.03] border rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-zinc-700 focus:outline-none transition-all duration-200
@@ -236,11 +239,10 @@ const PortfolioDashboard = () => {
                   <button
                     key={curr}
                     onClick={() => setSelectedCurrency(curr)}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 active:scale-95 ${
-                      selectedCurrency === curr
+                    className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 active:scale-95 ${selectedCurrency === curr
                         ? "bg-black text-[#B4925B] shadow-lg"
                         : "bg-black/15 text-black hover:bg-black/25"
-                    }`}
+                      }`}
                   >
                     {curr}
                   </button>
@@ -269,13 +271,13 @@ const PortfolioDashboard = () => {
               <h3 className="text-base font-bold text-white">Personal & Account</h3>
             </div>
 
-            <InputField label="Full Name"   icon={User}     name="fullName"      value={formData.fullName} />
-            <InputField label="First Name"  icon={User}     name="firstName"     value={formData.firstName} />
-            <InputField label="Last Name"   icon={User}     name="lastName"      value={formData.lastName} />
-            <InputField label="Username"    icon={User}     name="username"      value={formData.username} />
-            <InputField label="Email"       icon={Mail}     name="email"         value={formData.email}         readOnly />
-            <InputField label="Email Verified" icon={Mail}  name="emailVerified" type="checkbox" value={formData.emailVerified} readOnly />
-            <InputField label="Phone"       icon={Phone}    name="phone"         value={formData.phone} />
+            <InputField label="Full Name" icon={User} name="fullName" value={formData.fullName} />
+            <InputField label="First Name" icon={User} name="firstName" value={formData.firstName} />
+            <InputField label="Last Name" icon={User} name="lastName" value={formData.lastName} />
+            <InputField label="Username" icon={User} name="username" value={formData.username} />
+            <InputField label="Email" icon={Mail} name="email" value={formData.email} readOnly />
+            <InputField label="Email Verified" icon={Mail} name="emailVerified" type="checkbox" value={formData.emailVerified} readOnly />
+            <InputField label="Phone" icon={Phone} name="phone" value={formData.phone} />
             <InputField label="Phone Verified" icon={Phone} name="phoneVerified" type="checkbox" value={formData.phoneVerified} readOnly />
             <InputField label="Date of Birth" icon={Calendar} name="dateOfBirth" value={formData.dateOfBirth} />
           </div>
@@ -296,12 +298,12 @@ const PortfolioDashboard = () => {
               <h3 className="text-base font-bold text-white">Address & KYC</h3>
             </div>
 
-            <InputField label="Address"        icon={MapPin}    name="address"       value={formData.address} />
-            <InputField label="City"           icon={MapPin}    name="city"          value={formData.city} />
-            <InputField label="Country"        icon={Globe}     name="country"       value={formData.country} />
-            <InputField label="Zip Code"       icon={MapPin}    name="zipCode"       value={formData.zipCode} />
+            <InputField label="Address" icon={MapPin} name="address" value={formData.address} />
+            <InputField label="City" icon={MapPin} name="city" value={formData.city} />
+            <InputField label="Country" icon={Globe} name="country" value={formData.country} />
+            <InputField label="Zip Code" icon={MapPin} name="zipCode" value={formData.zipCode} />
             <InputField label="Wallet Address" icon={DollarSign} name="walletAddress" value={formData.walletAddress} />
-            <InputField label="KYC Verified"   icon={Shield}    name="kycVerified"   type="checkbox" value={formData.kycVerified} readOnly />
+            <InputField label="KYC Verified" icon={Shield} name="kycVerified" type="checkbox" value={formData.kycVerified} readOnly />
           </div>
         </div>
 

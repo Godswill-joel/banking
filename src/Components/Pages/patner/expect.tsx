@@ -55,7 +55,11 @@ export default function WhatToExpect() {
                     {expectations.map((item) => (
                         <div key={item.id} className="flex flex-col items-center text-center">
                             {/* Icon */}
-                            <Image src={item.icon} alt="" className="h-9 w-9 mb-5 opacity-80" />
+                            <Image
+                                width={500}
+                                height={500}
+                                src={item.icon} alt=""
+                                className="h-9 w-9 mb-5 opacity-80" />
 
                             {/* Title */}
                             <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
