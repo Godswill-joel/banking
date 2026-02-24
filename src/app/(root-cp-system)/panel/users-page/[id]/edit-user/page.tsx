@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import { UserData } from "@/lib/hook/useUserData";
 import React, { useState, useEffect } from "react";
 import {
     User,
@@ -31,17 +32,17 @@ import { useParams, useRouter } from "next/navigation";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/firebase/config";
 
+
 export default function UserProfileEdit() {
-    const params = useParams();
     const router = useRouter();
-    const userId = params.id;
-    const [userData, setUserData] = useState<any>(null);
+    const { id: userId } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(true);
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [editedData, setEditedData] = useState<any>({});
+    const [userData, setUserData] = useState<UserData | null>(null);
+    const [editedData, setEditedData] = useState<Partial<UserData>>({});
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -52,7 +53,7 @@ export default function UserProfileEdit() {
 
                 if (userSnap.exists()) {
                     const data = userSnap.data();
-                    setUserData(data);
+                    setUserData(data as UserData);
                     setEditedData(data);
                     setSelectedImage(data.profileImage || null);
                 } else {
@@ -94,19 +95,19 @@ export default function UserProfileEdit() {
 
     const handleSave = async () => {
         if (!userId || !editedData) return;
-        
+
         try {
             setIsSaving(true);
             const userRef = doc(db, "users", userId);
-            
+
             // Prepare update data
             const updateData = {
                 ...editedData,
                 updatedAt: new Date()
             };
-            
+
             await updateDoc(userRef, updateData);
-            
+
             alert("Profile updated successfully!");
             router.back(); // Go back to previous page
         } catch (error) {
@@ -138,7 +139,7 @@ export default function UserProfileEdit() {
                 {/* Header */}
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                        <button 
+                        <button
                             onClick={() => router.back()}
                             className="p-3 hover:bg-white/80 rounded-xl transition-all backdrop-blur-sm border border-white/20"
                         >
@@ -163,7 +164,7 @@ export default function UserProfileEdit() {
                                 <AlertTriangle size={20} />
                             </button>
                         </div>
-                        <button 
+                        <button
                             onClick={handleSave}
                             disabled={isSaving}
                             className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold hover:shadow-xl transition-all flex items-center gap-2 disabled:opacity-50"
@@ -241,7 +242,7 @@ export default function UserProfileEdit() {
                                                 <button
                                                     onClick={() => {
                                                         setSelectedImage(null);
-                                                        setEditedData({...editedData, profileImage: null});
+                                                        setEditedData({ ...editedData, profileImage: null });
                                                     }}
                                                     className="absolute -top-2 -right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all shadow-lg"
                                                 >
@@ -398,7 +399,7 @@ export default function UserProfileEdit() {
                                     <p className="text-sm text-gray-600 mb-4">
                                         Leave password fields empty to keep current password
                                     </p>
-                                    
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div className="space-y-2">
                                             <label className="block text-sm font-semibold text-gray-700">

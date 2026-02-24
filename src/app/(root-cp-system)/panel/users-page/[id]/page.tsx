@@ -33,7 +33,6 @@ import { db } from "@/firebase/config";
 import { createTransaction, fetchTransactions } from "@/firebase/firebaseTransactions";
 
 
-
 export default function UserProfileView() {
     const params = useParams();
     // const router = useRouter()
@@ -46,7 +45,7 @@ export default function UserProfileView() {
 
     const [showCreateTxModal, setShowCreateTxModal] = useState(false);
     const [txType, setTxType] = useState<"deposit" | "withdraw" | "received" | "transfer">("deposit");
-    const [status, setStatus] = useState<"completed" | "pending" | "failed" | "reverted">("completed");
+    const [status, setStatus] = useState<"completed" | "pending" | "failed" >("completed");
     const [amount, setAmount] = useState("");
     const [currency, setCurrency] = useState<"USD" | "BTC">("USD");
     const [txDate, setTxDate] = useState("");
@@ -58,10 +57,10 @@ export default function UserProfileView() {
     useEffect(() => {
         console.log("userId param:", userId);
     }, [userId]);
-
     useEffect(() => {
         const fetchUser = async () => {
-            if (!userId) return;
+            if (!userId || typeof userId !== 'string') return;
+
             try {
                 const userRef = doc(db, "users", userId);
                 const userSnap = await getDoc(userRef);
@@ -84,7 +83,7 @@ export default function UserProfileView() {
     useEffect(() => {
         if (!userId) return;
         const loadTransactions = async () => {
-            const userTxs = await fetchTransactions(userId);
+            const userTxs = await fetchTransactions(userId as string);
             setTransactions(userTxs);
         };
         loadTransactions();
@@ -139,20 +138,20 @@ export default function UserProfileView() {
         },
     ];
 
-    const handleCreate = () => {
-        if (!amount || parseFloat(amount) <= 0) {
-            alert("Enter valid amount");
-            return;
-        }
-        setCreating(true);
-        // Simulate creation
-        setTimeout(() => {
-            setCreating(false);
-            setShowCreateTxModal(false);
-            setAmount('');
-            setDescription('');
-        }, 1500);
-    };
+    // const handleCreate = () => {
+    //     if (!amount || parseFloat(amount) <= 0) {
+    //         alert("Enter valid amount");
+    //         return;
+    //     }
+    //     setCreating(true);
+    //     // Simulate creation
+    //     setTimeout(() => {
+    //         setCreating(false);
+    //         setShowCreateTxModal(false);
+    //         setAmount('');
+    //         setDescription('');
+    //     }, 1500);
+    // };
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50 p-4 md:p-6 lg:p-8">
@@ -707,7 +706,7 @@ export default function UserProfileView() {
                                         <select
                                             id="statusSelect"
                                             value={status}
-                                            onChange={(e) => setStatus(e.target.value as "completed" | "pending" | "failed" | "reverted")}
+                                            onChange={(e) => setStatus(e.target.value as "completed" | "pending" | "failed" )}
                                             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-normal text-gray-800 shadow-sm appearance-none"
                                         >
                                             <option value="completed">Completed</option>
@@ -808,14 +807,13 @@ export default function UserProfileView() {
                                         setCreating(true);
 
                                         // Create transaction with proper status
-                                        await createTransaction(userId!, {
+                                        await createTransaction(userId as string, {
                                             type: txType,
                                             amount: parseFloat(amount),
                                             currency,
                                             status: status, // Use the status state
                                             date: txDate || new Date().toISOString().split('T')[0],
-                                            description: description || `${txType.charAt(0).toUpperCase() + txType.slice(1)} via admin panel`,
-                                            createdAt: new Date().toISOString(),
+                                            description: description || `${txType.charAt(0).toUpperCase() + txType.slice(1)} via admin panel`,                                           
                                         });
 
                                         // Refresh user data and transactions
@@ -825,7 +823,7 @@ export default function UserProfileView() {
                                             setUserData(updatedUserSnap.data());
                                         }
 
-                                        const userTxs = await fetchTransactions(userId!);
+                                        const userTxs = await fetchTransactions(userId! as string);
                                         setTransactions(userTxs);
 
                                         // Reset form

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "@/firebase/config";
@@ -24,6 +25,12 @@ export interface UserData {
   city?: string;
   walletAddress?: string;
   kycVerified?: boolean;
+  role?: string; 
+  lastFunded?: string; 
+  newPassword?: string;
+  confirmPassword?: string;
+  createdAt?: any;
+  lastLogin?: any;
 }
 
 export function useUserData() {

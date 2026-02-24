@@ -4,7 +4,7 @@ import { doc, collection, setDoc, getDoc, updateDoc, serverTimestamp, query, ord
 import { db } from "@/firebase/config";
 
 export const createTransaction = async (userId: string, tx: {
-  type: "deposit" | "withdraw",
+   type: "deposit" | "withdraw" | "received" | "transfer",
   amount: number,
   currency: "USD" | "BTC",
   status: "completed" | "pending" | "failed",

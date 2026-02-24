@@ -209,7 +209,13 @@ export default function MarketPricePage() {
                 </p>
               </div>
             </div>
-          
+
+            <div className="text-right">
+              <p className="text-xs text-gray-500">Last Updated</p>
+              <p className="text-sm text-white font-semibold">
+                {currentTime.toLocaleTimeString()}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -240,11 +246,10 @@ export default function MarketPricePage() {
                 <button
                   key={filter.key}
                   onClick={() => setActiveFilter(filter.key as any)}
-                  className={`px-4 py-3 rounded-xl font-semibold transition-all whitespace-nowrap ${
-                    activeFilter === filter.key
+                  className={`px-4 py-3 rounded-xl font-semibold transition-all whitespace-nowrap ${activeFilter === filter.key
                       ? "bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black"
                       : "bg-white/5 text-gray-400 hover:bg-white/10"
-                  }`}
+                    }`}
                 >
                   {filter.label}
                 </button>
@@ -353,11 +358,10 @@ export default function MarketPricePage() {
                       </td>
                       <td className="px-6 py-5 text-right">
                         <div
-                          className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg ${
-                            asset.change24h >= 0
+                          className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-lg ${asset.change24h >= 0
                               ? "bg-green-500/20 text-green-500"
                               : "bg-red-500/20 text-red-500"
-                          }`}
+                            }`}
                         >
                           {asset.change24h >= 0 ? (
                             <ArrowUpRight size={16} />
@@ -456,11 +460,10 @@ export default function MarketPricePage() {
                 <div className="bg-white/5 rounded-xl p-4">
                   <p className="text-gray-400 text-sm mb-1">24h Change</p>
                   <div
-                    className={`text-2xl font-bold ${
-                      selectedAsset.change24h >= 0
+                    className={`text-2xl font-bold ${selectedAsset.change24h >= 0
                         ? "text-green-500"
                         : "text-red-500"
-                    }`}
+                      }`}
                   >
                     {selectedAsset.change24h >= 0 ? "+" : ""}
                     {selectedAsset.change24h.toFixed(2)}%

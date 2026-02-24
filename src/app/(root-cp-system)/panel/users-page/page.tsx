@@ -20,6 +20,7 @@ import Link from 'next/link';
 
 export default function UsersPage() {
     const [searchTerm, setSearchTerm] = useState("");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [statusFilter, setStatusFilter] = useState("all");
     const [users, setUsers] = useState<any[]>([]);
 
