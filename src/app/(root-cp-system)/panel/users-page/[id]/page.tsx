@@ -45,7 +45,7 @@ export default function UserProfileView() {
 
     const [showCreateTxModal, setShowCreateTxModal] = useState(false);
     const [txType, setTxType] = useState<"deposit" | "withdraw" | "received" | "transfer">("deposit");
-    const [status, setStatus] = useState<"completed" | "pending" | "failed" >("completed");
+    const [status, setStatus] = useState<"completed" | "pending" | "failed">("completed");
     const [amount, setAmount] = useState("");
     const [currency, setCurrency] = useState<"USD" | "BTC">("USD");
     const [txDate, setTxDate] = useState("");
@@ -706,7 +706,7 @@ export default function UserProfileView() {
                                         <select
                                             id="statusSelect"
                                             value={status}
-                                            onChange={(e) => setStatus(e.target.value as "completed" | "pending" | "failed" )}
+                                            onChange={(e) => setStatus(e.target.value as "completed" | "pending" | "failed")}
                                             className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none bg-white hover:border-gray-400 font-normal text-gray-800 shadow-sm appearance-none"
                                         >
                                             <option value="completed">Completed</option>
@@ -813,11 +813,16 @@ export default function UserProfileView() {
                                             currency,
                                             status: status, // Use the status state
                                             date: txDate || new Date().toISOString().split('T')[0],
-                                            description: description || `${txType.charAt(0).toUpperCase() + txType.slice(1)} via admin panel`,                                           
+                                            description: description || `${txType.charAt(0).toUpperCase() + txType.slice(1)} via admin panel`,
                                         });
 
                                         // Refresh user data and transactions
-                                        const userRef = doc(db, "users", userId!);
+                                        const userIdString = Array.isArray(userId) ? userId[0] : userId;
+                                        if (!userIdString) {
+                                            console.error("User ID is undefined");
+                                            return;
+                                        }
+                                        const userRef = doc(db, "users", userIdString);
                                         const updatedUserSnap = await getDoc(userRef);
                                         if (updatedUserSnap.exists()) {
                                             setUserData(updatedUserSnap.data());
