@@ -158,7 +158,7 @@ export default function ProtectedRoute({ children }: Props) {
 
     useEffect(() => {
         if (!loading && !user) {
-            router.replace("/admin-login");
+            router.replace("/user-login");
         }
     }, [user, loading, router]);
 
