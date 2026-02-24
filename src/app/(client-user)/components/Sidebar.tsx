@@ -61,6 +61,14 @@ export default function UserSidebar() {
       showInBottomNav: true,
     },
     {
+      id: "invest",
+      label: "My Investments",
+      icon: TrendingUp,
+      path: "/dashboard/invest/my-investment",
+      badge: null,
+      showInBottomNav: true,
+    },
+    {
       id: "crypto-prices",
       label: "Prices",
       icon: Bitcoin,

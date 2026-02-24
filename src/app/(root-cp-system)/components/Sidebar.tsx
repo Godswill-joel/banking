@@ -22,7 +22,7 @@ export default function Sidebar() {
     { id: "dashboard", label: "Dashboard", icon: Home, path: "/panel" },
     { id: "users", label: "Users", icon: Users, path: "/panel/users-page" },
     { id: "wallet", label: "Wallet", icon: Users, path: "/panel/wallet-page" },
-    { id: "loans", label: "Loans", icon: DollarSign, path: "/panel/loan" },
+    { id: "Investments", label: "Investments", icon: DollarSign, path: "/panel/loan" },
     { id: "communication", label: "Communication", icon: Mail, path: "/panel/communication" }
   ];
 
