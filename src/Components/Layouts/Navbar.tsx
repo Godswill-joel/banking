@@ -11,7 +11,7 @@ type NavItem = {
   desc?: string;
 };
 
-type NavigationKeys = 'individuals' |  'about';
+type NavigationKeys = 'individuals' | 'about';
 
 type NavigationType = Record<NavigationKeys, NavItem[]>;
 
@@ -85,7 +85,7 @@ export default function Navbar() {
 
     setHoveredDropdown(null);
   };
-  
+
 
   return (
     <nav
@@ -105,7 +105,7 @@ export default function Navbar() {
               onMouseLeave={handleMouseLeave}
               ref={(el) => {
                 dropdownRefs.current[key] = el;
-              }}              
+              }}
             >
               <a
                 href={href || '#'}
@@ -204,7 +204,9 @@ export default function Navbar() {
 
 
           <div className="pt-2 space-y-3">
-            <a className="block text-center py-2 text-base font-normal border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors duration-200">
+            <a
+              onClick={() => { router.push('/user-login') }}
+              className="block text-center py-2 text-base font-normal border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors duration-200">
               Sign in
             </a>
             <a className="block text-center py-2 text-base font-normal bg-[#C5A063] text-black rounded-lg hover:bg-[#b08a53] transition-colors duration-200">
