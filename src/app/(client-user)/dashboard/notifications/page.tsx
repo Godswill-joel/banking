@@ -168,8 +168,7 @@ export default function TransactionsPage() {
   const pendingCount = transactions.filter((t) => t.status === "pending").length;
 
   return (
-    <div className="min-h-screen  overflow-hidden w-full bg-gradient-to-br from-black via-gray-900 to-black">
-    {/* <div className="min-h-screen  overflow-hidden w-full bg-gradient-to-br from-black via-gray-900 to-black"> */}
+    <div className="min-h-screen p-2  overflow-hidden w-full bg-gradient-to-br from-black via-gray-900 to-black">
       <div className="w-full space-y-3  lg:max-w-3xl">
 
         {/* ── Header ── */}
@@ -231,7 +230,7 @@ export default function TransactionsPage() {
           </div>
 
           {/* Filter chips — scrollable on mobile */}
-          <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide -mx-1 px-1">
+          <div className="flex gap-1.5 overflow-x-auto pb-0.5 scrollbar-hide  px-1">
             {FILTERS.map((f) => (
               <button
                 key={f.key}
