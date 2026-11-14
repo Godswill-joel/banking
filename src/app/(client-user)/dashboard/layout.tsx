@@ -46,7 +46,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
         <Header />
 
         <main
-          className={`flex-1 p-2 lg:p-6 mt-16 bg-black transition-all duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}  
+          className={`flex-1 mt-16 sm:p-2 bg-black transition-all max-sm:w-screen overflow-hidden duration-300 ${isCollapsed ? "lg:ml-20" : "lg:ml-72"}`}  
         >
           {children}
         </main>

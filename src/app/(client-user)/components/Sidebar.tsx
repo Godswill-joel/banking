@@ -51,7 +51,7 @@ export default function UserSidebar() {
     { id: "invest", label: "Invest", icon: TrendingUp, path: "/dashboard/invest", badge: null },
     { id: "my-invest", label: "My Investments", icon: TrendingUp, path: "/dashboard/invest/my-investment", badge: null },
     { id: "prices", label: "Prices", icon: Bitcoin, path: "/dashboard/prices", badge: null },
-    { id: "notifications", label: "Alerts", icon: Bell, path: "/dashboard/notifications", badge: "5" },
+    { id: "notifications", label: "Notifications", icon: Bell, path: "/dashboard/notifications", badge: "5" },
     { id: "chats", label: "Chats", icon: MessageCircle, path: "/dashboard/chat", badge: "5" },
   ];
 
