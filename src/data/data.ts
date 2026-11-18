@@ -137,18 +137,6 @@ export const footer = {
           external: true,
           icon: "twitter",
         },
-        {
-          label: "LinkedIn",
-          href: "https://www.linkedin.com",
-          external: true,
-          icon: "linkedin",
-        },
-        {
-          label: "GitHub",
-          href: "https://github.com/river",
-          external: true,
-          icon: "github",
-        },
       ] as FooterLink[],
     },
   ],

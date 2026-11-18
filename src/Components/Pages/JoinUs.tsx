@@ -21,13 +21,10 @@ export default function JoinUs() {
 
   return (
     <div className="bg-[#0D0D0D] text-white px-6 lg:px-24 py-20 text-center">
-      <h3 className="text-3xl md:text-6xl font-semibold mb-10">
+      <h3 className="text-3xl md:text-6xl font-semibold mb-50">
         Join <span className="text-[#C5A063]">thousands</span> of investors on River today
       </h3>
 
-      <button className="mb-16 px-8 py-3 text-sm font-medium bg-[#C5A063] text-black rounded-lg hover:bg-[#d2b36f] transition">
-        Buy Bitcoin
-      </button>
 
       <div className="grid md:grid-cols-2 gap-10">
         {cards.map((card, i) => (

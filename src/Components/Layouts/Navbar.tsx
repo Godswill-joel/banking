@@ -140,7 +140,9 @@ export default function Navbar() {
               Log in
             </p>
           </Link>
-          <a className="px-4 py-2 text-base font-normal bg-[#C5A063] text-black hover:bg-[#b08a53] rounded-2xl transition-colors duration-200">
+          <a
+            onClick={() => { router.push('/user-login') }}
+            className="px-4 py-2 text-base font-normal bg-[#C5A063] text-black hover:bg-[#b08a53] rounded-2xl transition-colors duration-200">
             Sign up
           </a>
         </div>

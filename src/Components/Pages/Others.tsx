@@ -3,8 +3,11 @@ import { InterestModal } from "@/Components/Pages/Modals";
 import React, { useState } from "react";
 import Image from "next/image";
 import { walletFeatures } from "@/data/data";
+import { useRouter } from 'next/navigation';
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import appImg from "../../../public/assets/iphone-wallet.webp";
+
+
 
 
 export function BuyBitcoinToPortfolio() {
@@ -116,6 +119,7 @@ export function Grow() {
 
 export function IntrestOther2() {
   const [showModal, setShowModal] = useState(false);
+  const router = useRouter()
 
   return (
     <section className="bg-[#0D0D0D] text-white px-6 lg:px-24 py-20 text-center relative">
@@ -127,15 +131,13 @@ export function IntrestOther2() {
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-6 mt-8">
           <button
-            onClick={() => setShowModal(true)}
+             onClick={() => { router.push('/buy-bitcoin') }}
             className="px-8 py-3 bg-[#C5A063] text-black font-medium text-lg rounded-lg hover:bg-[#b6934c] transition"
           >
             How interest is earned
           </button>
 
-          <button className="px-8 py-3 border border-[#C5A063] text-[#C5A063] font-medium text-lg rounded-lg hover:bg-[#C5A063] hover:text-black transition">
-            Different from Bitcoin yield
-          </button>
+          
         </div>
       </div>
 
@@ -160,13 +162,9 @@ export function StartEarningButton() {
   return (
     <section className="bg-[#0D0D0D] text-white text-center px-6">
       <div className="max-w-3xl mx-auto space-y-8">
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+        <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-15  ">
           Start earning <span className="text-[#C5A063]">Bitcoin</span> on your cash today
         </h1>
-
-        <button className="px-4 py-2 bg-[#C5A063] text-black font-semibold text-lg rounded-lg hover:bg-[#b6934c] transition duration-300">
-          Start earning
-        </button>
       </div>
     </section>
   );

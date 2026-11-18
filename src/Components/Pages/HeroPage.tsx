@@ -1,6 +1,11 @@
+'use client'
+
 import Image from "next/image";
+import { useRouter } from 'next/navigation';
+
 
 export default function HeroPage() {
+  const router = useRouter()
   return (
     <main className="bg-[#0D0D0D] text-white min-h-[90vh] flex flex-col lg:flex-row items-center justify-between px-6 lg:px-24 pt-24">
       {/* Left Section */}
@@ -16,7 +21,9 @@ export default function HeroPage() {
           <li>3.75% Bitcoin interest on cash</li>
         </ul>
 
-        <button className="mt-6 px-8 py-3 text-lg text-black  font-bold bg-[#C1A578]  rounded-lg transition-colors">
+        <button
+          onClick={() => { router.push('/buy-bitcoin') }}
+          className="mt-6 px-8 py-3 text-lg text-black  font-bold bg-[#C1A578]  rounded-lg transition-colors">
           Buy Bitcoin
         </button>
       </div>

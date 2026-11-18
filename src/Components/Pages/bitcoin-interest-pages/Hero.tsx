@@ -27,9 +27,7 @@ export default function Hero() {
           ✓ Withdraw your cash at any time
         </p>
 
-        <button className="px-10 py-4 bg-[#C5A063] text-black font-medium rounded-lg hover:bg-[#b6934c] transition">
-          Start earning Bitcoin
-        </button>
+        
 
         <div className="relative w-full max-w-4xl mx-auto mt-16">
           <Image
