@@ -4,7 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import privateclienthero from "@/../public/assets/privateclienthero.webp";
 import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { Button } from "@headlessui/react";
 
 export default function PrivateClientHero() {
   return (
