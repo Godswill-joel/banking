@@ -53,7 +53,7 @@ export const storiesData = [
       "The onboarding process was fast and secure — River’s team really understands business needs.",
     author: "James Ortega",
     role: "Managing Partner, Keen Eyecare Consultants",
-    cta: { text: "Get started", href: "/signup" },
+    cta: { text: "Get started", href: "/user-login/sign-up" },
   },
 ];
 

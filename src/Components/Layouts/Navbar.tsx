@@ -211,7 +211,9 @@ export default function Navbar() {
               className="block text-center py-2 text-base font-normal border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors duration-200">
               Sign in
             </a>
-            <a className="block text-center py-2 text-base font-normal bg-[#C5A063] text-black rounded-lg hover:bg-[#b08a53] transition-colors duration-200">
+            <a 
+            onClick={() => { router.push('/user-login/sign-up') }}
+            className="block text-center py-2 text-base font-normal bg-[#C5A063] text-black rounded-lg hover:bg-[#b08a53] transition-colors duration-200">
               Get started
             </a>
           </div>

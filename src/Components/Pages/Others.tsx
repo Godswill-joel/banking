@@ -6,6 +6,7 @@ import { walletFeatures } from "@/data/data";
 import { useRouter } from 'next/navigation';
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import appImg from "../../../public/assets/iphone-wallet.webp";
+import router from "next/router";
 
 
 
@@ -330,7 +331,9 @@ export function GetstartedButton() {
         Ready to get started?
       </p>
 
-      <button className="flex items-center gap-2 px-8 py-3   text-[#C5A063] font-medium text-lg transition">
+      <button 
+      onClick={() => { router.push('/user-login/sign-up') }}
+      className="flex items-center gap-2 px-8 py-3   text-[#C5A063] font-medium text-lg transition">
         Get Started
         <ArrowRightIcon className="w-5 h-5" />
       </button>
