@@ -170,10 +170,8 @@ export default function RiverUserDashboard() {
     };
 
     const quickActions = [
-        { title: "Send", icon: Send, path: "/send" },
-        { title: "Receive", icon: Download, path: "/receive" },
-        { title: "Invest", icon: TrendingUp, path: "/invest" },
-        { title: "Loan", icon: DollarSign, path: "/loans" },
+        { title: "Withdraw", icon: Download, path: "/dashboard/wallet" },
+        { title: "Invest", icon: TrendingUp, path: "/dashboard/invest/my-investment" }
     ];
 
     if (loading) {

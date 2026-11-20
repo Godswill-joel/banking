@@ -13,7 +13,6 @@ import {
   LogOut,
   HelpCircle,
   User,
-  Download,
   Bitcoin,
   Menu,
   X,
@@ -47,7 +46,6 @@ export default function UserSidebar() {
   const mainMenuItems = [
     { id: "dashboard", label: "Dashboard", icon: Home, path: "/dashboard", badge: null },
     { id: "wallet", label: "Wallet", icon: Wallet, path: "/dashboard/wallet", badge: null },
-    { id: "receive", label: "Send/Receive", icon: Download, path: "/dashboard/receive", badge: null },
     { id: "invest", label: "Invest", icon: TrendingUp, path: "/dashboard/invest", badge: null },
     { id: "my-invest", label: "My Investments", icon: TrendingUp, path: "/dashboard/invest/my-investment", badge: null },
     { id: "notifications", label: "Notifications", icon: Bell, path: "/dashboard/notifications", badge: "5" },
