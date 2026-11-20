@@ -29,9 +29,9 @@ export default function PrivateClientHero() {
             entity and start investing in Bitcoin today.
           </p>
 
-          <Button className="bg-[#C5A063] hover:bg-[#b08a53] text-black font-medium py-3 px-6 rounded-lg transition text-lg">
+          {/* <Button className="bg-[#C5A063] hover:bg-[#b08a53] text-black font-medium py-3 px-6 rounded-lg transition text-lg">
             Talk to the team
-          </Button>
+          </Button> */}
 
           <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-5 text-gray-300 text-lg sm:text-xl md:text-2xl">
             {[

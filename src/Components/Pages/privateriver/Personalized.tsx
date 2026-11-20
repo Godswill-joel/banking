@@ -1,5 +1,6 @@
+'use client'
 import Image from 'next/image';
-
+// import { useRouter } from 'next/router';
 // Import images for each service
 import service1 from '@/../public/assets/Rivercall.webp';
 import service2 from '@/../public/assets/interest.webp';
@@ -7,6 +8,7 @@ import service3 from '@/../public/assets/beneficiaries.webp';
 import { Button } from '@headlessui/react';
 
 export default function Personalized() {
+
     const services = [
         {
             id: 1,
@@ -107,9 +109,9 @@ export default function Personalized() {
                                 ))}
                             </div>
 
-                            {/* CTA Button */}
                             <div className="pt-4">
-                                <Button className="bg-[#C5A063] hover:bg-gray-800 text-black font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform">
+                                <Button 
+                                className="bg-[#C5A063] hover:bg-gray-800 text-black font-semibold py-4 px-8 rounded-lg text-lg transition-colors duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-transform">
                                     Talk to our team
                                 </Button>
                             </div>

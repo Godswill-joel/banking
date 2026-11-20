@@ -96,14 +96,14 @@ export const footer = {
     {
       title: "Product",
       links: [
-        { label: "Sign Up", href: "/signup" },
-        { label: "Buy Bitcoin", href: "/buy" },
-        { label: "Bitcoin Interest", href: "/interest" },
-        { label: "Zero Fee DCA", href: "/dca" },
+        { label: "Sign Up", href: "/user-login" },
+        { label: "Buy Bitcoin", href: "/buy-bitcoin" },
+        { label: "Bitcoin Interest", href: "/bitcoin-interest" },
+        { label: "Zero Fee DCA", href: "/zero-fee" },
         { label: "River Link", href: "/link" },
-        { label: "Bitcoin Price", href: "/price" },
+        { label: "Bitcoin Price", href: "/wallet" },
         { label: "Private Clients", href: "/privateriver" },
-        { label: "Businesses", href: "/businesses" },
+        { label: "Businesses", href: "/business" },
       ] as FooterLink[],
     },
     {

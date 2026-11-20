@@ -1,4 +1,6 @@
+'use client'
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import img1 from '../../../public/assets/recurring-buy.webp';
 import img2 from '../../../public/assets/iphone-wallet.webp';
 import img3 from '../../../public/assets/bitcoin-interest-mobile.webp';
@@ -7,6 +9,8 @@ import img5 from '../../../public/assets/private-client-man.webp';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 export default function AssetDisplay() {
+    const router = useRouter();
+
     const card = [
         {
             img: img1,
@@ -85,10 +89,14 @@ export default function AssetDisplay() {
                         fees or minimums, and withdraw your cash at any time.
                     </p>
                     <div className="flex gap-4 pt-4 w-full justify-center">
-                        <button className="px-6 py-2 text-sm font-medium bg-[#C5A063] text-black rounded-lg transition">
+                        <button
+                            onClick={() => { router.push('/bitcoin-interest') }}
+                            className="px-6 py-2 text-sm font-medium bg-[#C5A063] text-black rounded-lg transition">
                             Earn Bitcoin
                         </button>
-                        <button className="px-6 py-2 text-sm font-medium text-[#C5A063]">
+                        <button 
+                        onClick={() => { router.push('/business') }}
+                        className="px-6 py-2 text-sm font-medium text-[#C5A063]">
                             Learn more <ArrowRightIcon className="inline-block w-4 h-4 ml-2" />
                         </button>
                     </div>

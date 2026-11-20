@@ -9,15 +9,11 @@ import {
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "@/firebase/config";
 import { useUserData, UserData } from "@/lib/hook/useUserData";
-import { useFormatPrice } from "@/lib/hook/useFormatPrice";
 
 const PortfolioDashboard = () => {
   const { user, userData, loading: userLoading, error } = useUserData();
-  const { formatUSD } = useFormatPrice();
 
   const [isEditing, setIsEditing] = useState(false);
-  const [showBalance, setShowBalance] = useState(true);
-  const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [loading, setLoading] = useState(false);
   const [saveStatus, setSaveStatus] = useState("");
   const [formData, setFormData] = useState<UserData | null>(null);
@@ -193,62 +189,6 @@ const PortfolioDashboard = () => {
                 Edit Profile
               </button>
             )}
-          </div>
-        </div>
-
-        {/* ── Balance Card ── */}
-        <div
-          className="rounded-2xl sm:rounded-3xl overflow-hidden"
-          style={{
-            background: "linear-gradient(135deg, #C9A96E 0%, #B4925B 50%, #8B7355 100%)",
-            boxShadow: "0 20px 60px -12px rgba(180,146,91,0.35)",
-          }}
-        >
-          <div className="p-5 sm:p-7 lg:p-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
-
-              {/* Balance */}
-              <div>
-                <p className="text-black/60 text-xs font-semibold uppercase tracking-widest mb-2">Total Balance</p>
-                <div className="flex items-center gap-3 flex-wrap">
-                  <h2
-                    className="font-extrabold text-black leading-none tracking-tight"
-                    style={{ fontSize: "clamp(1.8rem, 6vw, 3rem)" }}
-                  >
-                    {showBalance
-                      ? selectedCurrency === "USD"
-                        ? formatUSD(formData.balance)
-                        : `${formData.bitcoinBalance} BTC`
-                      : "••••••••"}
-                  </h2>
-                  <button
-                    onClick={() => setShowBalance(!showBalance)}
-                    className="p-2 rounded-lg bg-black/10 hover:bg-black/20 active:scale-95 transition-all"
-                    aria-label="Toggle visibility"
-                  >
-                    {showBalance
-                      ? <EyeOff className="w-5 h-5 text-black" />
-                      : <Eye className="w-5 h-5 text-black" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Currency switcher */}
-              <div className="flex gap-2 self-start sm:self-auto">
-                {["USD", "BTC"].map((curr) => (
-                  <button
-                    key={curr}
-                    onClick={() => setSelectedCurrency(curr)}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-200 active:scale-95 ${selectedCurrency === curr
-                        ? "bg-black text-[#B4925B] shadow-lg"
-                        : "bg-black/15 text-black hover:bg-black/25"
-                      }`}
-                  >
-                    {curr}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
