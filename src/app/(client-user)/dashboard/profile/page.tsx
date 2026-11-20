@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import {
   User, Mail, Phone, Calendar, MapPin, Globe,
-  Shield, DollarSign, Lock, Eye, EyeOff,
+  Shield, DollarSign, Lock,
   Save, Edit2, Check, AlertCircle, Loader
 } from "lucide-react";
 import { doc, setDoc } from "firebase/firestore";
