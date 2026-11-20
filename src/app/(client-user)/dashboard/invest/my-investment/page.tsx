@@ -307,7 +307,7 @@ export default function MyInvestmentsPage() {
               </p>
             </div>
             <button
-              onClick={() => router.push("/invest")}
+              onClick={() => router.push("/dashboard/invest")}
               className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black font-bold rounded-xl text-sm hover:opacity-90 transition-opacity"
             >
               Browse Plans <ChevronRight size={16} />

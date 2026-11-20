@@ -311,7 +311,7 @@ export default function RiverUserDashboard() {
                                 <InvestmentRow
                                     key={inv.id}
                                     inv={inv}
-                                    onClick={() => router.push(`/my-investments`)}
+                                    onClick={() => router.push(`#`)}
                                 />
                             ))}
                             {investments.length > 3 && (
