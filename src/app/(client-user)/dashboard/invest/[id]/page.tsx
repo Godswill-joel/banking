@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import {
@@ -19,10 +19,21 @@ import {
     X,
     AlertCircle,
     Calculator,
+    Landmark,
+    CreditCard,
+    Bitcoin,
+    Gem,
 } from "lucide-react";
 import { useUserData } from "@/lib/hook/useUserData";
 import { db, auth } from "@/firebase/config";
-import { collection, addDoc, serverTimestamp, doc, getDoc } from "firebase/firestore";
+import {
+    collection,
+    addDoc,
+    serverTimestamp,
+    query,
+    where,
+    onSnapshot,
+} from "firebase/firestore";
 
 const PLANS: Record<string, {
     id: string;
@@ -113,7 +124,62 @@ const PLANS: Record<string, {
     },
 };
 
+// ─── Payment accounts (managed from the admin dashboard) ──────────────────────
 
+type AccountType = "bank" | "paypal" | "bitcoin" | "ethereum";
+
+interface PaymentAccount {
+    id: string;
+    type: AccountType;
+    label: string;
+    details: Record<string, string>;
+    active: boolean;
+}
+
+const TYPE_ORDER: AccountType[] = ["bank", "paypal", "bitcoin", "ethereum"];
+
+const ACCOUNT_TYPES: Record<
+    AccountType,
+    {
+        name: string;
+        icon: React.ElementType;
+        isCrypto: boolean;
+        fields: { key: string; label: string }[];
+    }
+> = {
+    bank: {
+        name: "Bank Transfer",
+        icon: Landmark,
+        isCrypto: false,
+        fields: [
+            { key: "bankName", label: "Bank Name" },
+            { key: "accountName", label: "Account Name" },
+            { key: "accountNumber", label: "Account Number / IBAN" },
+            { key: "swift", label: "SWIFT / Routing Code" },
+        ],
+    },
+    paypal: {
+        name: "PayPal",
+        icon: CreditCard,
+        isCrypto: false,
+        fields: [
+            { key: "email", label: "PayPal Email" },
+            { key: "accountName", label: "Account Name" },
+        ],
+    },
+    bitcoin: {
+        name: "Bitcoin (BTC)",
+        icon: Bitcoin,
+        isCrypto: true,
+        fields: [{ key: "address", label: "BTC Address" }],
+    },
+    ethereum: {
+        name: "Ethereum (ETH)",
+        icon: Gem,
+        isCrypto: true,
+        fields: [{ key: "address", label: "ETH Address" }],
+    },
+};
 
 const STEPS = [
     { id: 1, label: "Plan Details", icon: FileText },
@@ -127,51 +193,75 @@ export default function InvestPlanPage() {
     const router = useRouter();
     const planId = (params?.id as string) || "starter";
     const plan = PLANS[planId];
-    const [wallets, setWallets] = useState<{
-        BTC: string;
-        USDT_TRC20: string;
-        USDT_ERC20: string;
-    }>({
-        BTC: "",
-        USDT_TRC20: "",
-        USDT_ERC20: "",
-    });
 
     const { userData, loading: userLoading } = useUserData();
+
+    const [accounts, setAccounts] = useState<PaymentAccount[]>([]);
+    const [accountsLoading, setAccountsLoading] = useState(true);
+    const [selectedType, setSelectedType] = useState<AccountType | null>(null);
+    const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
 
     const [step, setStep] = useState(1);
     const [amount, setAmount] = useState("");
     const [payoutFrequency, setPayoutFrequency] = useState("");
-    const [cryptoChoice, setCryptoChoice] = useState<"BTC" | "USDT_TRC20" | "USDT_ERC20">("BTC");
     const [txHash, setTxHash] = useState("");
     const [screenshotFile, setScreenshotFile] = useState<File | null>(null);
     const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
     const [agreed, setAgreed] = useState(false);
-    const [copied, setCopied] = useState(false);
+    const [copiedKey, setCopiedKey] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const fileRef = useRef<HTMLInputElement>(null);
 
+    // Live list of payment accounts the admin has made visible
     useEffect(() => {
-        async function fetchWallets() {
-            try {
-                const snap = await getDoc(doc(db, "settings", "wallets"));
-                if (snap.exists()) {
-                    const data = snap.data();
-                    setWallets({
-                        BTC: data.BTC || "",
-                        USDT_TRC20: data.USDT_TRC20 || "",
-                        USDT_ERC20: data.USDT_ERC20 || "",
-                    });
-                }
-            } catch (err) {
-                console.error("Failed to load wallets", err);
+        const unsub = onSnapshot(
+            query(collection(db, "paymentAccounts"), where("active", "==", true)),
+            (snap) => {
+                setAccounts(
+                    snap.docs.map((d) => ({ id: d.id, ...d.data() } as PaymentAccount))
+                );
+                setAccountsLoading(false);
+            },
+            (err) => {
+                console.error("Failed to load payment accounts", err);
+                setAccountsLoading(false);
             }
-        }
-
-        fetchWallets();
+        );
+        return () => unsub();
     }, []);
+
+    // Only the types that actually have an active account
+    const availableTypes = useMemo(
+        () => TYPE_ORDER.filter((t) => accounts.some((a) => a.type === t)),
+        [accounts]
+    );
+
+    const accountsOfType = useMemo(
+        () => accounts.filter((a) => a.type === selectedType),
+        [accounts, selectedType]
+    );
+
+    const selectedAccount =
+        accountsOfType.find((a) => a.id === selectedAccountId) ?? accountsOfType[0] ?? null;
+
+    // Keep the selection valid as accounts change
+    useEffect(() => {
+        if (availableTypes.length === 0) {
+            setSelectedType(null);
+            return;
+        }
+        if (!selectedType || !availableTypes.includes(selectedType)) {
+            setSelectedType(availableTypes[0]);
+        }
+    }, [availableTypes, selectedType]);
+
+    useEffect(() => {
+        if (!accountsOfType.some((a) => a.id === selectedAccountId)) {
+            setSelectedAccountId(accountsOfType[0]?.id ?? null);
+        }
+    }, [accountsOfType, selectedAccountId]);
 
     useEffect(() => {
         if (!plan) router.push("/dashboard/invest");
@@ -194,10 +284,13 @@ export default function InvestPlanPage() {
 
     const PlanIcon = plan.icon;
     const parsedAmount = parseFloat(amount) || 0;
-    const walletAddress = wallets[cryptoChoice];
     const monthlyEarning = parsedAmount * (plan.roi / 100);
     const totalReturn = parsedAmount + monthlyEarning * (plan.durationDays / 30);
-
+    const typeCfg = selectedType ? ACCOUNT_TYPES[selectedType] : null;
+    const visibleFields =
+        typeCfg && selectedAccount
+            ? typeCfg.fields.filter((f) => selectedAccount.details?.[f.key])
+            : [];
 
     function validateStep1() {
         const e: Record<string, string> = {};
@@ -213,17 +306,17 @@ export default function InvestPlanPage() {
 
     function validateStep3() {
         const e: Record<string, string> = {};
-        if (!txHash && !screenshotFile)
-            e.proof = "Please provide a transaction hash or upload a screenshot";
+        if (!selectedAccount) e.proof = "No payment method is available right now.";
+        else if (!txHash && !screenshotFile)
+            e.proof = "Please provide a transaction hash/reference or upload a screenshot";
         setErrors(e);
         return Object.keys(e).length === 0;
     }
 
-
-    function copyWallet() {
-        navigator.clipboard.writeText(walletAddress);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
+    function copyValue(key: string, value: string) {
+        navigator.clipboard.writeText(value);
+        setCopiedKey(key);
+        setTimeout(() => setCopiedKey(""), 2000);
     }
 
     function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
@@ -237,7 +330,7 @@ export default function InvestPlanPage() {
 
     // ─── Submit investment ─────────────────────────────────────────────────────
     async function handleSubmit() {
-        if (!validateStep3()) return;
+        if (!validateStep3() || !selectedAccount || !selectedType) return;
         setSubmitting(true);
         try {
             const uid = auth.currentUser?.uid;
@@ -249,8 +342,11 @@ export default function InvestPlanPage() {
                 roi: plan.roi,
                 duration: plan.duration,
                 payoutFrequency,
-                cryptoChoice,
-                walletAddress,
+                paymentType: selectedType,
+                paymentMethod: ACCOUNT_TYPES[selectedType].name,
+                paymentAccountId: selectedAccount.id,
+                paymentAccountLabel: selectedAccount.label || "",
+                paymentDetails: selectedAccount.details || {},
                 txHash: txHash || null,
                 hasScreenshot: !!screenshotFile,
                 status: "pending",
@@ -268,7 +364,6 @@ export default function InvestPlanPage() {
             setSubmitting(false);
         }
     }
-
 
     function nextStep() {
         if (step === 2 && !validateStep1()) return;
@@ -328,7 +423,6 @@ export default function InvestPlanPage() {
             </div>
         );
     }
-
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black p-4 md:p-8">
@@ -540,23 +634,23 @@ export default function InvestPlanPage() {
                                 </div>
                             </div>
 
-                            {/* Amount input if not set */}
-                            {(!amount || parsedAmount < plan.minInvestment) && (
-                                <div>
-                                    <label className="text-xs text-gray-400 mb-1 block">Investment Amount (USD) *</label>
-                                    <div className="relative">
-                                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
-                                        <input
-                                            type="number"
-                                            value={amount}
-                                            onChange={(e) => setAmount(e.target.value)}
-                                            placeholder={`Min $${plan.minInvestment}`}
-                                            className="w-full bg-black/50 border border-white/10 rounded-lg pl-7 pr-4 py-3 text-white focus:outline-none focus:border-[#B4925B] transition-colors"
-                                        />
-                                    </div>
-                                    {errors.amount && <p className="text-red-400 text-xs mt-1">{errors.amount}</p>}
+                            {/* Amount input — always visible and editable */}
+                            <div>
+                                <label className="text-xs text-gray-400 mb-1 block">Investment Amount (USD) *</label>
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">$</span>
+                                    <input
+                                        type="number"
+                                        value={amount}
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        placeholder={`Min $${plan.minInvestment}`}
+                                        min={plan.minInvestment}
+                                        max={plan.maxInvestment}
+                                        className="w-full bg-black/50 border border-white/10 rounded-lg pl-7 pr-4 py-3 text-white focus:outline-none focus:border-[#B4925B] transition-colors"
+                                    />
                                 </div>
-                            )}
+                                {errors.amount && <p className="text-red-400 text-xs mt-1">{errors.amount}</p>}
+                            </div>
 
                             {/* T&C */}
                             <label className="flex items-start gap-3 cursor-pointer group">
@@ -606,142 +700,203 @@ export default function InvestPlanPage() {
                                 <p className="text-sm text-gray-400 mt-1">
                                     Send exactly{" "}
                                     <span className="text-[#B4925B] font-semibold">${parsedAmount.toLocaleString()} USD</span>{" "}
-                                    equivalent to the address below.
+                                    {typeCfg?.isCrypto ? "equivalent " : ""}to the account below.
                                 </p>
                             </div>
 
-                            {/* Crypto selector */}
-                            <div>
-                                <label className="text-xs text-gray-400 uppercase tracking-wider mb-3 block">Select Network</label>
-                                <div className="grid grid-cols-3 gap-3">
-                                    {(["BTC", "USDT_TRC20", "USDT_ERC20"] as const).map((key) => {
-                                        const labels: Record<string, string> = {
-                                            BTC: "Bitcoin (BTC)",
-                                            USDT_TRC20: "USDT TRC20",
-                                            USDT_ERC20: "USDT ERC20",
-                                        };
-                                        return (
-                                            <button
-                                                key={key}
-                                                onClick={() => setCryptoChoice(key)}
-                                                className={`py-3 px-3 rounded-xl border text-sm font-medium transition-all text-center ${cryptoChoice === key
-                                                    ? "border-[#B4925B] bg-[#B4925B]/10 text-[#B4925B]"
-                                                    : "border-white/10 text-gray-400 hover:border-white/30"
-                                                    }`}
-                                            >
-                                                {labels[key]}
-                                            </button>
-                                        );
-                                    })}
+                            {accountsLoading && (
+                                <div className="flex justify-center py-8">
+                                    <div className="w-6 h-6 border-2 border-[#B4925B] border-t-transparent rounded-full animate-spin" />
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Wallet address */}
-                            <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-3">
-                                <div className="flex items-center gap-2 text-gray-400 text-xs uppercase tracking-wider">
-                                    <Wallet size={14} />
-                                    Payment Address
-                                </div>
-                                <div className="flex items-start gap-3">
-                                    <code className="flex-1 text-[#B4925B] text-sm break-all font-mono bg-black/40 rounded-lg p-3">
-                                        {walletAddress}
-                                    </code>
-                                    <button
-                                        onClick={copyWallet}
-                                        className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-all ${copied
-                                            ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                                            : "bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-white/30"
-                                            }`}
-                                    >
-                                        {copied ? <CheckCircle size={14} /> : <Copy size={14} />}
-                                        {copied ? "Copied!" : "Copy"}
-                                    </button>
-                                </div>
-                                <div className="flex items-start gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
-                                    <AlertCircle size={14} className="text-yellow-400 flex-shrink-0 mt-0.5" />
-                                    <p className="text-yellow-300 text-xs">
-                                        Send only on the selected network. Sending on the wrong network will result in permanent loss of funds.
+                            {!accountsLoading && availableTypes.length === 0 && (
+                                <div className="flex items-start gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+                                    <AlertCircle size={16} className="text-yellow-400 flex-shrink-0 mt-0.5" />
+                                    <p className="text-yellow-300 text-sm">
+                                        No payment methods are available at the moment. Please contact support or try again later.
                                     </p>
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Amount reminder */}
-                            <div className="flex items-center justify-between bg-[#B4925B]/5 border border-[#B4925B]/20 rounded-xl p-4">
-                                <div className="text-gray-400 text-sm flex items-center gap-2">
-                                    <Clock size={16} /> Amount to send
-                                </div>
-                                <div className="text-[#B4925B] font-bold text-lg">${parsedAmount.toLocaleString()} USD</div>
-                            </div>
+                            {!accountsLoading && availableTypes.length > 0 && typeCfg && (
+                                <>
+                                    {/* Payment method selector (only available methods) */}
+                                    <div>
+                                        <label className="text-xs text-gray-400 uppercase tracking-wider mb-3 block">Select Payment Method</label>
+                                        <div className={`grid gap-3 ${availableTypes.length === 1
+                                            ? "grid-cols-1"
+                                            : availableTypes.length === 2
+                                                ? "grid-cols-2"
+                                                : "grid-cols-2 md:grid-cols-4"
+                                            }`}>
+                                            {availableTypes.map((key) => {
+                                                const c = ACCOUNT_TYPES[key];
+                                                const TypeIcon = c.icon;
+                                                return (
+                                                    <button
+                                                        key={key}
+                                                        onClick={() => setSelectedType(key)}
+                                                        className={`flex items-center justify-center gap-2 py-3 px-3 rounded-xl border text-sm font-medium transition-all text-center ${selectedType === key
+                                                            ? "border-[#B4925B] bg-[#B4925B]/10 text-[#B4925B]"
+                                                            : "border-white/10 text-gray-400 hover:border-white/30"
+                                                            }`}
+                                                    >
+                                                        <TypeIcon size={16} />
+                                                        {c.name}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
 
-                            {/* Proof of payment */}
-                            <div className="space-y-4">
-                                <h3 className="text-sm font-semibold text-gray-300">Proof of Payment</h3>
-
-                                {/* TX Hash */}
-                                <div>
-                                    <label className="text-xs text-gray-400 mb-1 block">Transaction Hash / ID (optional if uploading screenshot)</label>
-                                    <input
-                                        type="text"
-                                        value={txHash}
-                                        onChange={(e) => setTxHash(e.target.value)}
-                                        placeholder="0x... or txid..."
-                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-mono focus:outline-none focus:border-[#B4925B] transition-colors"
-                                    />
-                                </div>
-
-                                {/* Screenshot upload */}
-                                <div>
-                                    <label className="text-xs text-gray-400 mb-2 block">Upload Screenshot</label>
-                                    <div
-                                        onClick={() => fileRef.current?.click()}
-                                        className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center ${screenshotPreview
-                                            ? "border-[#B4925B]/50 bg-[#B4925B]/5"
-                                            : "border-white/10 hover:border-[#B4925B]/30 hover:bg-white/5"
-                                            }`}
-                                    >
-                                        {screenshotPreview ? (
-                                            <div className="space-y-3">
-                                                <Image
-                                                    src={screenshotPreview}
-                                                    alt="Screenshot"
-                                                    className="max-h-40 mx-auto rounded-lg object-contain" />
-                                                <div className="flex items-center justify-center gap-2 text-green-400 text-sm">
-                                                    <CheckCircle size={16} /> Screenshot uploaded
-                                                </div>
+                                    {/* If admin added several accounts of the same type */}
+                                    {accountsOfType.length > 1 && (
+                                        <div className="flex gap-2 flex-wrap">
+                                            {accountsOfType.map((a, i) => (
                                                 <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setScreenshotFile(null);
-                                                        setScreenshotPreview(null);
-                                                    }}
-                                                    className="flex items-center gap-1 text-xs text-red-400 mx-auto hover:text-red-300"
+                                                    key={a.id}
+                                                    onClick={() => setSelectedAccountId(a.id)}
+                                                    className={`px-4 py-2 rounded-lg border text-xs font-medium transition-all ${selectedAccount?.id === a.id
+                                                        ? "border-[#B4925B] bg-[#B4925B]/10 text-[#B4925B]"
+                                                        : "border-white/10 text-gray-400 hover:border-white/30"
+                                                        }`}
                                                 >
-                                                    <X size={12} /> Remove
+                                                    {a.label || `${typeCfg.name} ${i + 1}`}
                                                 </button>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Account details */}
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-5 space-y-3">
+                                        <div className="flex items-center gap-2 text-gray-400 text-xs uppercase tracking-wider">
+                                            <Wallet size={14} />
+                                            {typeCfg.isCrypto ? "Payment Address" : "Payment Details"}
+                                        </div>
+
+                                        <div className="space-y-3">
+                                            {visibleFields.map((f) => {
+                                                const value = selectedAccount!.details[f.key];
+                                                const k = `${selectedAccount!.id}-${f.key}`;
+                                                return (
+                                                    <div key={f.key} className="space-y-1.5">
+                                                        <div className="text-gray-500 text-xs">{f.label}</div>
+                                                        <div className="flex items-start gap-3">
+                                                            <code className="flex-1 text-[#B4925B] text-sm break-all font-mono bg-black/40 rounded-lg p-3">
+                                                                {value}
+                                                            </code>
+                                                            <button
+                                                                onClick={() => copyValue(k, value)}
+                                                                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm transition-all ${copiedKey === k
+                                                                    ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                                                                    : "bg-white/5 border border-white/10 text-gray-400 hover:text-white hover:border-white/30"
+                                                                    }`}
+                                                            >
+                                                                {copiedKey === k ? <CheckCircle size={14} /> : <Copy size={14} />}
+                                                                {copiedKey === k ? "Copied!" : "Copy"}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        <div className="flex items-start gap-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
+                                            <AlertCircle size={14} className="text-yellow-400 flex-shrink-0 mt-0.5" />
+                                            <p className="text-yellow-300 text-xs">
+                                                {typeCfg.isCrypto
+                                                    ? "Send only on the selected network. Sending on the wrong network will result in permanent loss of funds."
+                                                    : "Double-check the details above before sending, and keep your payment receipt as proof of payment."}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Amount reminder */}
+                                    <div className="flex items-center justify-between bg-[#B4925B]/5 border border-[#B4925B]/20 rounded-xl p-4">
+                                        <div className="text-gray-400 text-sm flex items-center gap-2">
+                                            <Clock size={16} /> Amount to send
+                                        </div>
+                                        <div className="text-[#B4925B] font-bold text-lg">${parsedAmount.toLocaleString()} USD</div>
+                                    </div>
+
+                                    {/* Proof of payment */}
+                                    <div className="space-y-4">
+                                        <h3 className="text-sm font-semibold text-gray-300">Proof of Payment</h3>
+
+                                        {/* TX Hash */}
+                                        <div>
+                                            <label className="text-xs text-gray-400 mb-1 block">
+                                                {typeCfg.isCrypto ? "Transaction Hash / ID" : "Transaction Reference / ID"} (optional if uploading screenshot)
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={txHash}
+                                                onChange={(e) => setTxHash(e.target.value)}
+                                                placeholder={typeCfg.isCrypto ? "0x... or txid..." : "Reference or transaction ID"}
+                                                className="w-full bg-black/50 border border-white/10 rounded-lg px-4 py-3 text-white text-sm font-mono focus:outline-none focus:border-[#B4925B] transition-colors"
+                                            />
+                                        </div>
+
+                                        {/* Screenshot upload */}
+                                        <div>
+                                            <label className="text-xs text-gray-400 mb-2 block">Upload Screenshot</label>
+                                            <div
+                                                onClick={() => fileRef.current?.click()}
+                                                className={`border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all text-center ${screenshotPreview
+                                                    ? "border-[#B4925B]/50 bg-[#B4925B]/5"
+                                                    : "border-white/10 hover:border-[#B4925B]/30 hover:bg-white/5"
+                                                    }`}
+                                            >
+                                                {screenshotPreview ? (
+                                                    <div className="space-y-3">
+                                                        <Image
+                                                            src={screenshotPreview}
+                                                            alt="Screenshot"
+                                                            width={400}
+                                                            height={160}
+                                                            unoptimized
+                                                            className="max-h-40 w-auto mx-auto rounded-lg object-contain" />
+                                                        <div className="flex items-center justify-center gap-2 text-green-400 text-sm">
+                                                            <CheckCircle size={16} /> Screenshot uploaded
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setScreenshotFile(null);
+                                                                setScreenshotPreview(null);
+                                                                if (fileRef.current) fileRef.current.value = "";
+                                                            }}
+                                                            className="flex items-center gap-1 text-xs text-red-400 mx-auto hover:text-red-300"
+                                                        >
+                                                            <X size={12} /> Remove
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="space-y-2">
+                                                        <Upload size={32} className="text-gray-600 mx-auto" />
+                                                        <p className="text-gray-400 text-sm">Click to upload payment screenshot</p>
+                                                        <p className="text-gray-600 text-xs">PNG, JPG, WEBP up to 10MB</p>
+                                                    </div>
+                                                )}
                                             </div>
-                                        ) : (
-                                            <div className="space-y-2">
-                                                <Upload size={32} className="text-gray-600 mx-auto" />
-                                                <p className="text-gray-400 text-sm">Click to upload payment screenshot</p>
-                                                <p className="text-gray-600 text-xs">PNG, JPG, WEBP up to 10MB</p>
+                                            <input
+                                                ref={fileRef}
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleFile}
+                                                className="hidden"
+                                            />
+                                        </div>
+
+                                        {errors.proof && (
+                                            <div className="flex items-center gap-2 text-red-400 text-sm">
+                                                <AlertCircle size={14} /> {errors.proof}
                                             </div>
                                         )}
                                     </div>
-                                    <input
-                                        ref={fileRef}
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFile}
-                                        className="hidden"
-                                    />
-                                </div>
-
-                                {errors.proof && (
-                                    <div className="flex items-center gap-2 text-red-400 text-sm">
-                                        <AlertCircle size={14} /> {errors.proof}
-                                    </div>
-                                )}
-                            </div>
+                                </>
+                            )}
 
                             <div className="flex gap-3 justify-between">
                                 <button
@@ -752,7 +907,8 @@ export default function InvestPlanPage() {
                                 </button>
                                 <button
                                     onClick={() => { if (validateStep3()) setStep(4); }}
-                                    className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black font-bold rounded-xl hover:opacity-90 transition-opacity"
+                                    disabled={!selectedAccount}
+                                    className="flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-[#B4925B] to-[#8B7355] text-black font-bold rounded-xl hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Review & Confirm <ChevronRight size={18} />
                                 </button>
@@ -790,7 +946,7 @@ export default function InvestPlanPage() {
                                 <div className="bg-white/5 rounded-xl p-5 space-y-3">
                                     <h3 className="text-[#B4925B] text-sm font-semibold uppercase tracking-wider">Payment Details</h3>
                                     {[
-                                        ["Network", cryptoChoice.replace("_", " ")],
+                                        ["Method", typeCfg?.name || "—"],
                                         ["Amount", `$${parsedAmount.toLocaleString()} USD`],
                                         ["Tx Hash", txHash ? `${txHash.slice(0, 12)}...` : "—"],
                                         ["Screenshot", screenshotFile ? "Uploaded ✓" : "—"],
